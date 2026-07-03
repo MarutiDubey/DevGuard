@@ -1,0 +1,10 @@
+diff --git a/cache/store.py b/cache/store.py
+index 1111111..2222222 100644
+--- a/cache/store.py
++++ b/cache/store.py
+@@ -1,4 +1,4 @@
+ import pickle
+
+ def load_session(blob):
+-    return {}
++    return pickle.loads(blob)

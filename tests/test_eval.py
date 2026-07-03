@@ -141,17 +141,44 @@ def test_mock_does_not_detect_shell_injection(sample_case_diff):
 # --- end-to-end ----------------------------------------------------------
 
 
+# Per-case ground truth for the mock provider over the packaged corpus, as
+# (tp, fp, fn). Keyed by case name so a drift names the culprit instead of a
+# bare aggregate mismatch. The mock deliberately lacks detectors for
+# shell=True, os.system, and yaml.load -> those three are guaranteed FNs.
+_EXPECTED_PER_CASE = {
+    "benign_rename": (0, 0, 0),  # 'token_count'/'password' comment must not FP
+    "clean": (0, 0, 0),
+    "command_injection": (0, 0, 1),  # os.system — no detector
+    "eval_input": (1, 0, 0),
+    "hardcoded_secret": (1, 0, 0),
+    "multi_bug": (2, 0, 0),  # md5 + hardcoded key in one diff
+    "shell_injection": (0, 0, 1),  # subprocess shell=True — no detector
+    "sql_fstring": (1, 0, 0),
+    "sql_injection": (1, 0, 0),
+    "unsafe_deserialization": (1, 0, 0),  # pickle.loads
+    "weak_hash": (1, 0, 0),
+    "yaml_load": (0, 0, 1),  # yaml.load — no detector
+}
+
+
 def test_run_eval_over_corpus_matches_known_baseline():
     from devguard.eval.__main__ import _mock_config
 
     report = run_eval(CASES_DIR, _mock_config())
+
+    # Every packaged case is accounted for, and each matches its known outcome.
+    by_name = {c.name: (c.match.tp, c.match.fp, c.match.fn) for c in report.cases}
+    assert by_name == _EXPECTED_PER_CASE
+
     tp = sum(c.match.tp for c in report.cases)
     fp = sum(c.match.fp for c in report.cases)
     fn = sum(c.match.fn for c in report.cases)
-    # 4 detected bugs, shell_injection missed (FN), clean stays clean.
-    assert (tp, fp, fn) == (4, 0, 1)
+    # 8 detected bugs; 3 guaranteed FNs (shell=True, os.system, yaml.load).
+    assert (tp, fp, fn) == (8, 0, 3)
+    # Precision stays 1.0 — the mock must never false-positive on this corpus.
     assert report.aggregate.precision == 1.0
-    assert report.aggregate.recall == 0.8
+    assert report.aggregate.recall == pytest.approx(8 / 11)
+    assert report.aggregate.f1 == pytest.approx(2 * 8 / (2 * 8 + 3))
 
 
 def test_load_cases_raises_on_missing_manifest(tmp_path):

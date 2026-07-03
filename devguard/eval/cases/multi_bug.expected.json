@@ -1,0 +1,7 @@
+{
+  "description": "Two seeded bugs in one diff — MD5 fingerprint and a hardcoded API key",
+  "bugs": [
+    {"file": "services/auth.py", "line": 5, "kind": "weak-hash", "line_tolerance": 2},
+    {"file": "services/auth.py", "line": 9, "kind": "hardcoded-secret", "line_tolerance": 2}
+  ]
+}

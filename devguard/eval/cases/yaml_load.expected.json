@@ -1,0 +1,6 @@
+{
+  "description": "yaml.load instead of yaml.safe_load — arbitrary object construction (mock has no yaml detector -> false negative)",
+  "bugs": [
+    {"file": "config/loader.py", "line": 5, "kind": "unsafe-yaml-load", "line_tolerance": 2}
+  ]
+}

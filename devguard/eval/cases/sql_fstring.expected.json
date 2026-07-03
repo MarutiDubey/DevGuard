@@ -1,0 +1,6 @@
+{
+  "description": "SQL query built with an f-string interpolating user input — SQL injection",
+  "bugs": [
+    {"file": "db/users.py", "line": 2, "kind": "sql-injection", "line_tolerance": 2}
+  ]
+}

@@ -1,0 +1,10 @@
+diff --git a/net/tools.py b/net/tools.py
+index 7777777..8888888 100644
+--- a/net/tools.py
++++ b/net/tools.py
+@@ -1,4 +1,4 @@
+ import os
+
+ def traceroute(host):
+-    return None
++    return os.system("traceroute " + host)

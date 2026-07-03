@@ -1,0 +1,6 @@
+{
+  "description": "os.system with concatenated user input — command injection (mock has no os.system detector -> false negative)",
+  "bugs": [
+    {"file": "net/tools.py", "line": 4, "kind": "command-injection", "line_tolerance": 2}
+  ]
+}

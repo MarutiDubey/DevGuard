@@ -1,0 +1,11 @@
+diff --git a/reports/generator.py b/reports/generator.py
+index 5555555..6666666 100644
+--- a/reports/generator.py
++++ b/reports/generator.py
+@@ -1,4 +1,4 @@
+ def build(rows):
+-    n = len(rows)
++    token_count = len(rows)
+     # TODO: reset password flow is handled elsewhere
+-    return n
++    return token_count

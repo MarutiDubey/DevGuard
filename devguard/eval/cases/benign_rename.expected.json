@@ -1,0 +1,4 @@
+{
+  "description": "Benign local-variable rename; 'token_count' and a 'password' comment must NOT trip the secret detector",
+  "bugs": []
+}

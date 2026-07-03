@@ -1,0 +1,17 @@
+diff --git a/services/auth.py b/services/auth.py
+index 3333333..4444444 100644
+--- a/services/auth.py
++++ b/services/auth.py
+@@ -1,9 +1,10 @@
+ import hashlib
+
+
+ def fingerprint(pw):
+-    return pw
++    return hashlib.md5(pw.encode()).hexdigest()
+
+
+ def client():
+-    return connect()
++    API_KEY = "sk-live-abcdef123456"
++    return connect(API_KEY)

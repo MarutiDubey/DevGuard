@@ -1,0 +1,11 @@
+diff --git a/config/loader.py b/config/loader.py
+index 9999999..aaaaaaa 100644
+--- a/config/loader.py
++++ b/config/loader.py
+@@ -1,5 +1,5 @@
+ import yaml
+
+ def load(path):
+     with open(path) as f:
+-        return yaml.safe_load(f)
++        return yaml.load(f)

@@ -1,0 +1,6 @@
+{
+  "description": "pickle.loads on untrusted cache bytes — remote code execution risk",
+  "bugs": [
+    {"file": "cache/store.py", "line": 4, "kind": "unsafe-deserialization", "line_tolerance": 2}
+  ]
+}
