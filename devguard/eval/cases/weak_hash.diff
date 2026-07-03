@@ -1,0 +1,10 @@
+diff --git a/auth/login.py b/auth/login.py
+index 1234567..abcdef0 100644
+--- a/auth/login.py
++++ b/auth/login.py
+@@ -1,4 +1,5 @@
+ import hashlib
+
+ def check_password(pw, stored):
+-    return pw == stored
++    return hashlib.md5(pw.encode()).hexdigest() == stored

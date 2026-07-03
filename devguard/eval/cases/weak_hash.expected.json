@@ -1,0 +1,6 @@
+{
+  "description": "MD5 used for password comparison",
+  "bugs": [
+    {"file": "auth/login.py", "line": 4, "kind": "weak-hash", "line_tolerance": 2}
+  ]
+}

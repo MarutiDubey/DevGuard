@@ -1,0 +1,6 @@
+{
+  "description": "subprocess with shell=True on unsanitized input (mock intentionally misses this -> guaranteed false negative)",
+  "bugs": [
+    {"file": "net/ping.py", "line": 5, "kind": "shell-injection", "line_tolerance": 2}
+  ]
+}

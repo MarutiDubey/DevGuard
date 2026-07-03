@@ -1,0 +1,9 @@
+diff --git a/api/handlers.py b/api/handlers.py
+index 2222222..3333333 100644
+--- a/api/handlers.py
++++ b/api/handlers.py
+@@ -10,3 +10,4 @@ import os
+ def run(cmd):
+     # execute
+-    return None
++    return eval(cmd)

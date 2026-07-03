@@ -1,0 +1,6 @@
+{
+  "description": "SQL query built with an f-string (injection)",
+  "bugs": [
+    {"file": "db/users.py", "line": 22, "kind": "sql-injection", "line_tolerance": 2}
+  ]
+}

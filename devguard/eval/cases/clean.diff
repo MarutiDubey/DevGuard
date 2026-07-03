@@ -1,0 +1,10 @@
+diff --git a/utils/format.py b/utils/format.py
+index aaaaaaa..bbbbbbb 100644
+--- a/utils/format.py
++++ b/utils/format.py
+@@ -1,3 +1,5 @@
+ def greet(name):
+-    return "hi " + name
++    if not name:
++        name = "there"
++    return f"Hello, {name}!"

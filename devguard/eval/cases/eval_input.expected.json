@@ -1,0 +1,6 @@
+{
+  "description": "eval() called on request-controlled input",
+  "bugs": [
+    {"file": "api/handlers.py", "line": 12, "kind": "code-injection", "line_tolerance": 2}
+  ]
+}

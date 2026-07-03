@@ -1,0 +1,8 @@
+diff --git a/db/users.py b/db/users.py
+index 6666666..7777777 100644
+--- a/db/users.py
++++ b/db/users.py
+@@ -20,2 +20,3 @@ def get_user(uid):
+ def get_user(uid):
+     cur = conn.cursor()
++    cur.execute(f"SELECT * FROM users WHERE id = {uid}")

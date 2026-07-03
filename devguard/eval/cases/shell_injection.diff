@@ -1,0 +1,8 @@
+diff --git a/net/ping.py b/net/ping.py
+index 8888888..9999999 100644
+--- a/net/ping.py
++++ b/net/ping.py
+@@ -3,2 +3,3 @@ import os
+ def ping(host):
+     import subprocess
++    subprocess.run(cmd, shell=True)
