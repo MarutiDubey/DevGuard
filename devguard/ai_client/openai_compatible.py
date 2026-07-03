@@ -6,12 +6,14 @@ differ only in default base URL and required headers.
 
 from __future__ import annotations
 
+import time
+
 import httpx
 
 from devguard.ai_client.base import AIProvider, AIProviderError
 from devguard.ai_client.prompt import SYSTEM_PROMPT, build_user_prompt, parse_review_response
 from devguard.logging_config import get_logger
-from devguard.models import Finding, ReviewResult
+from devguard.models import Finding, ReviewResult, UsageStats
 
 logger = get_logger(__name__)
 
@@ -52,6 +54,7 @@ class OpenAICompatibleProvider(AIProvider):
 
         url = f"{self._base_url()}/chat/completions"
         logger.info("Requesting review from %s model=%s", self.name, self.config.model)
+        start = time.perf_counter()
         try:
             response = httpx.post(
                 url,
@@ -67,16 +70,42 @@ class OpenAICompatibleProvider(AIProvider):
             ) from exc
         except httpx.HTTPError as exc:
             raise AIProviderError(f"{self.name} request failed: {exc}") from exc
+        latency_ms = int((time.perf_counter() - start) * 1000)
 
         try:
-            content = response.json()["choices"][0]["message"]["content"]
+            body = response.json()
+            content = body["choices"][0]["message"]["content"]
         except (KeyError, IndexError, ValueError) as exc:
             raise AIProviderError(f"{self.name} returned an unexpected response shape") from exc
 
         try:
-            return parse_review_response(content, findings)
+            result = parse_review_response(content, findings)
         except (ValueError, KeyError) as exc:
             raise AIProviderError(f"Could not parse {self.name} review JSON: {exc}") from exc
+
+        # Cost is left None here; the reviewer applies the pricing table (which
+        # knows the repo's [pricing] overrides) once it has the token counts.
+        result.usage = self._usage_from(body.get("usage"), latency_ms)
+        return result
+
+    def _usage_from(self, usage: object, latency_ms: int) -> UsageStats:
+        """Build a :class:`UsageStats` from the API's ``usage`` block (if present)."""
+        raw = usage if isinstance(usage, dict) else {}
+
+        def _as_int(key: str) -> int:
+            value = raw.get(key)
+            return value if isinstance(value, int) and not isinstance(value, bool) else 0
+
+        prompt_tokens = _as_int("prompt_tokens")
+        completion_tokens = _as_int("completion_tokens")
+        total_tokens = _as_int("total_tokens") or (prompt_tokens + completion_tokens)
+        return UsageStats(
+            model=self.config.model,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            total_tokens=total_tokens,
+            latency_ms=latency_ms,
+        )
 
 
 class OpenRouterProvider(OpenAICompatibleProvider):

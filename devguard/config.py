@@ -59,6 +59,8 @@ class Config:
     max_diff_lines: int
     log_level: str
     policy: ReviewPolicy = field(default_factory=ReviewPolicy)
+    # Per-repo model price overrides from [pricing]: model -> (input, output) per 1M tokens.
+    pricing_overrides: dict[str, tuple[float, float]] = field(default_factory=dict)
 
 
 def _get_int(name: str, default: int) -> int:
@@ -116,6 +118,30 @@ def _review_policy(toml_data: dict) -> ReviewPolicy:
     return ReviewPolicy(min_severity=min_severity, ignore_paths=ignore_paths)
 
 
+def _pricing_overrides(toml_data: dict) -> dict[str, tuple[float, float]]:
+    """Parse the ``[pricing]`` table into a model -> (input, output) map.
+
+    Each entry is ``"<model>" = [input_per_1m, output_per_1m]`` (two numbers).
+    An empty/absent table yields ``{}`` (built-in prices are used as-is).
+    """
+    pricing = toml_data.get("pricing", {})
+    if not isinstance(pricing, dict):
+        raise ConfigError("[pricing] must be a table")
+
+    overrides: dict[str, tuple[float, float]] = {}
+    for model, raw in pricing.items():
+        if (
+            not isinstance(raw, list)
+            or len(raw) != 2
+            or not all(isinstance(n, int | float) and not isinstance(n, bool) for n in raw)
+        ):
+            raise ConfigError(
+                f"pricing for {model!r} must be [input_per_1m, output_per_1m] numbers"
+            )
+        overrides[model] = (float(raw[0]), float(raw[1]))
+    return overrides
+
+
 def load_config(config_path: Path | None = None) -> Config:
     """Build a Config from `.devguard.toml` and the environment.
 
@@ -144,4 +170,5 @@ def load_config(config_path: Path | None = None) -> Config:
         max_diff_lines=_get_int("MAX_DIFF_LINES", 2000),
         log_level=os.getenv("LOG_LEVEL", "INFO"),
         policy=_review_policy(toml_data),
+        pricing_overrides=_pricing_overrides(toml_data),
     )

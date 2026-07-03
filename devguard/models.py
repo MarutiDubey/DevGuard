@@ -54,6 +54,23 @@ class Finding:
         return f"{self.file}:{self.line}" if self.line else self.file
 
 
+@dataclass(frozen=True)
+class UsageStats:
+    """Token usage, latency, and estimated cost of a single AI review call.
+
+    Populated by providers that talk to a real API (the tokens come from the
+    provider's ``usage`` block; latency is measured around the request).
+    ``estimated_cost_usd`` is ``None`` when the model's price is unknown.
+    """
+
+    model: str
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
+    latency_ms: int
+    estimated_cost_usd: float | None = None
+
+
 @dataclass
 class ReviewResult:
     """Structured output of an AI review pass over a diff."""
@@ -63,3 +80,5 @@ class ReviewResult:
     findings: list[Finding] = field(default_factory=list)
     # Semgrep findings the AI judged to be false positives (kept for transparency).
     dismissed: list[Finding] = field(default_factory=list)
+    # Token/cost/latency of the AI call; None for mock or empty reviews.
+    usage: UsageStats | None = None
