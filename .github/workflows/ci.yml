@@ -38,6 +38,9 @@ jobs:
       - name: Tests (pytest + coverage)
         run: pytest --cov=devguard --cov-report=term-missing
 
+      - name: Eval gate (precision/recall F1 ≥ 0.80)
+        run: python -m devguard.eval --fail-under 0.80
+
   security:
     name: Security scan
     runs-on: ubuntu-latest
