@@ -25,10 +25,14 @@ SYSTEM_PROMPT = (
     '  "findings": [\n'
     '    {"severity": "info|warning|error", "title": "<short>", '
     '"message": "<explanation + suggested fix>", "file": "<path or null>", '
-    '"line": <int or null>}\n'
+    '"line": <int or null>, '
+    '"suggestion": "<replacement code for that line, or null>"}\n'
     "  ],\n"
     '  "dismissed_rule_ids": ["<semgrep rule_id you judged a false positive>"]\n'
-    "}"
+    "}\n\n"
+    "For 'suggestion': provide the corrected code ONLY when you are confident of "
+    "a concrete, drop-in replacement for the flagged line(s) — just the code, no "
+    "fences or prose. Use null when a fix is unclear or spans many lines."
 )
 
 
@@ -75,6 +79,28 @@ def _coerce_severity(value: object) -> Severity:
         return Severity.WARNING
 
 
+def _clean_suggestion(value: object) -> str | None:
+    """Normalise a raw ``suggestion`` value into replacement code, or None.
+
+    The schema asks for bare code, but models sometimes wrap it in ``` fences
+    anyway — strip those so the comment renderer can build its own suggestion
+    block. Empty / null / non-string values become None.
+    """
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    if not text:
+        return None
+    if text.startswith("```"):
+        lines = text.splitlines()
+        # Drop the opening fence (possibly ```lang) and a trailing fence.
+        lines = lines[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        text = "\n".join(lines).strip()
+    return text or None
+
+
 def parse_review_response(content: str, semgrep_findings: list[Finding]) -> ReviewResult:
     """Parse the model's JSON response into a :class:`ReviewResult`.
 
@@ -96,6 +122,7 @@ def parse_review_response(content: str, semgrep_findings: list[Finding]) -> Revi
                 message=str(raw.get("message", "")),
                 file=(str(raw["file"]) if raw.get("file") else None),
                 line=(int(line) if isinstance(line, int | str) and str(line).isdigit() else None),
+                suggestion=_clean_suggestion(raw.get("suggestion")),
             )
         )
 

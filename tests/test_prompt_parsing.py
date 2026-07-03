@@ -76,6 +76,69 @@ def test_no_json_raises() -> None:
         parse_review_response("I refuse to answer.", [])
 
 
+def test_parse_reads_suggestion() -> None:
+    content = json.dumps(
+        {
+            "summary": "s",
+            "risk": "Low",
+            "findings": [
+                {
+                    "severity": "warning",
+                    "title": "Weak hash",
+                    "message": "use sha256",
+                    "file": "auth.py",
+                    "line": 12,
+                    "suggestion": "hashlib.sha256(pw).hexdigest()",
+                }
+            ],
+        }
+    )
+    result = parse_review_response(content, [])
+    assert result.findings[0].suggestion == "hashlib.sha256(pw).hexdigest()"
+
+
+def test_parse_suggestion_strips_code_fences() -> None:
+    # Model ignored the "no fences" instruction and wrapped the code anyway.
+    content = json.dumps(
+        {
+            "summary": "s",
+            "risk": "Low",
+            "findings": [
+                {
+                    "severity": "warning",
+                    "title": "x",
+                    "message": "m",
+                    "suggestion": "```python\nreturn safe(x)\n```",
+                }
+            ],
+        }
+    )
+    result = parse_review_response(content, [])
+    assert result.findings[0].suggestion == "return safe(x)"
+
+
+def test_parse_null_or_missing_suggestion_is_none() -> None:
+    content = json.dumps(
+        {
+            "summary": "s",
+            "risk": "Low",
+            "findings": [
+                {"severity": "info", "title": "a", "message": "m", "suggestion": None},
+                {"severity": "info", "title": "b", "message": "m"},
+                {"severity": "info", "title": "c", "message": "m", "suggestion": "   "},
+            ],
+        }
+    )
+    result = parse_review_response(content, [])
+    assert all(f.suggestion is None for f in result.findings)
+
+
+def test_system_prompt_documents_suggestion() -> None:
+    from devguard.ai_client.prompt import SYSTEM_PROMPT
+
+    assert "suggestion" in SYSTEM_PROMPT
+
+
 def test_build_user_prompt_includes_findings() -> None:
     prompt = build_user_prompt("diff --git a/x b/x", [_semgrep("rule.x")])
     assert "rule.x" in prompt

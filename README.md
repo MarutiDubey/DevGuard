@@ -117,6 +117,22 @@ in a small footer line on the PR comment, e.g.:
 Cost is estimated from the built-in price table plus any `[pricing]` overrides;
 an unpriced model shows `cost unknown` rather than a wrong number.
 
+### Fix suggestions
+
+When the model is confident of a concrete fix, it includes drop-in replacement
+code, rendered under the finding as a `suggestion` block:
+
+> - 🔴 **Weak password hash** (`auth.py:12`, _ai_)
+>   MD5 is broken; use SHA-256.
+>   ````
+>   ```suggestion
+>   return hashlib.sha256(pw.encode()).hexdigest()
+>   ```
+>   ````
+
+The code is kept verbatim so you can copy it straight in. (Posting these as
+inline, one-click-committable review comments is a planned follow-up.)
+
 ---
 
 ## GitHub Action

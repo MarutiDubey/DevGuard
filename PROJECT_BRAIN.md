@@ -84,8 +84,9 @@ project root/
 ### Phase 2 — Enhanced Review Features (in progress, 2026-07-03)
 - [x] `.devguard.toml` repo config — tunable `min_severity` + `ignore_paths` review policy, plus optional `[ai] model` (`devguard/config.py`, `devguard/policy.py`; filter wired into `reviewer.py` before risk scoring)
 - [x] Cost/latency logging per review call — providers capture tokens + latency into `ReviewResult.usage`; `reviewer.py` prices the call via `devguard/pricing.py` (built-in table + optional `[pricing]` toml overrides) and logs it; `comment.py` renders a footer line
+- [x] Fix suggestions (foundation) — optional `suggestion` field on `Finding`; the AI proposes drop-in replacement code, rendered as a ```suggestion block in the comment (`models.py`, `ai_client/prompt.py`, `comment.py`). Verbatim/flush-left so it's copy-pasteable now and commit-ready when posted inline later.
+- [ ] Fix suggestions (inline) — post findings with a suggestion as inline review comments (Reviews API + diff line mapping) for GitHub's one-click "Commit suggestion" button
 - [ ] `/describe` — auto-generated PR summary/description
-- [ ] Fix suggestions (committable code suggestions, not auto-applied)
 
 > Update this list as tasks complete. Move done items to the Decisions/Completed log below.
 
@@ -185,6 +186,7 @@ Registry: `ai_client/registry.py`. To add a new provider, implement the interfac
 | 2026-07-03 | Review policy filters findings *before* risk scoring | `apply_policy` runs in `reviewer.py` between the AI call and `heuristic_risk`, so `min_severity`/`ignore_paths` findings neither reach the PR comment nor inflate the risk level. `min_severity="info"` + no `ignore_paths` = default = zero behaviour change. |
 | 2026-07-04 | Cost/latency: provider captures tokens+latency, reviewer prices it | The provider (`openai_compatible.py`) only records raw tokens + measured latency into `ReviewResult.usage`; the reviewer applies the pricing table because that's where the full `Config` (with `[pricing]` overrides) lives — keeps providers dependency-free. |
 | 2026-07-04 | Pricing = hybrid hardcoded table + optional `[pricing]` toml override | `pricing.py` ships prices for common models (USD per 1M tokens, input/output billed separately); repo can override/extend via `[pricing]`. Unknown model → cost `None` → "cost unknown" rather than a wrong number. |
+| 2026-07-04 | Fix suggestions shipped in two steps; step 1 = summary block | GitHub's one-click "Commit suggestion" only works in *inline review comments*, not the summary comment DevGuard posts. Step 1 (this): optional `suggestion` on `Finding`, rendered as a flush-left, verbatim ```suggestion block (copy-pasteable, commit-ready). Step 2 (later): post inline via the Reviews API for true one-click. `_clean_suggestion` strips stray code fences the model adds despite the "bare code" instruction. |
 
 ---
 

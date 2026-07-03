@@ -46,6 +46,9 @@ class Finding:
     file: str | None = None
     line: int | None = None
     rule_id: str | None = None
+    # Proposed replacement code for the flagged line(s), if the AI offered one.
+    # Rendered as a GitHub ```suggestion block in the PR comment.
+    suggestion: str | None = None
 
     def location(self) -> str:
         """Human-readable file:line location, or '(general)' when unattached."""

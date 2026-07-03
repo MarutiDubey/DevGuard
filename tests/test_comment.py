@@ -72,6 +72,45 @@ def test_footer_shows_cost_unknown() -> None:
     assert "cost unknown" in body
 
 
+def test_render_includes_suggestion_block() -> None:
+    result = ReviewResult(
+        summary="s",
+        risk=RiskLevel.MEDIUM,
+        findings=[
+            Finding(
+                source=FindingSource.AI,
+                severity=Severity.ERROR,
+                title="Weak hash",
+                message="Use SHA-256.",
+                file="auth.py",
+                line=12,
+                suggestion="hashlib.sha256(pw).hexdigest()",
+            )
+        ],
+    )
+    body = render_comment(result, _stats())
+    assert "```suggestion" in body
+    assert "hashlib.sha256(pw).hexdigest()" in body
+
+
+def test_render_omits_suggestion_when_absent() -> None:
+    result = ReviewResult(
+        summary="s",
+        risk=RiskLevel.LOW,
+        findings=[
+            Finding(
+                source=FindingSource.AI,
+                severity=Severity.INFO,
+                title="Note",
+                message="fyi",
+                file="x.py",
+                line=1,
+            )
+        ],
+    )
+    assert "```suggestion" not in render_comment(result, _stats())
+
+
 def test_render_lists_findings_and_dismissed() -> None:
     result = ReviewResult(
         summary="s",

@@ -25,7 +25,12 @@ def _finding_line(f: Finding) -> str:
     icon = _SEVERITY_ICON.get(f.severity, "•")
     loc = f.location()
     src = f.rule_id or f.source.value
-    return f"- {icon} **{f.title}** (`{loc}`, _{src}_)\n  {f.message}"
+    line = f"- {icon} **{f.title}** (`{loc}`, _{src}_)\n  {f.message}"
+    if f.suggestion:
+        # Flush-left, verbatim code so the block stays copy-pasteable now and
+        # commit-ready when we post these as inline review comments later.
+        line += f"\n\n```suggestion\n{f.suggestion}\n```"
+    return line
 
 
 def render_comment(result: ReviewResult, stats: DiffStats) -> str:
