@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
   --text: #64748b;
   --text-h: #0f172a;
@@ -30,8 +32,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -182,6 +182,28 @@ a {
 .hero-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 11px 22px;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
 }
 
 /* ── Textarea ── */
@@ -407,6 +429,128 @@ button.secondary {
   margin-top: 14px;
   font-size: 14px;
   color: var(--text);
+}
+
+/* ── How it works ── */
+.how {
+  margin-top: 72px;
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.how-step {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+  background: var(--bg);
+}
+
+.how-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.how-step h3 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.how-step p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Screenshot ── */
+.shot {
+  margin-top: 72px;
+  text-align: center;
+}
+
+.shot-sub {
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.shot-frame {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--code-bg);
+}
+
+.shot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Try it live ── */
+.try {
+  margin-top: 80px;
+}
+
+.try-sub {
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+/* ── Features ── */
+.features {
+  margin-top: 80px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.feature {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.feature-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.feature h3 {
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+
+.feature p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--text);
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .how-grid,
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 footer {

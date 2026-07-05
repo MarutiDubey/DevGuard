@@ -1,8 +1,13 @@
 ﻿import { useState } from "react";
 import { DiffInput } from "./components/DiffInput";
 import { ReviewOutput } from "./components/ReviewOutput";
+import { HowItWorks } from "./components/HowItWorks";
+import { Screenshot } from "./components/Screenshot";
+import { Features } from "./components/Features";
 import { Setup } from "./components/Setup";
 import { reviewDiff, ReviewApiError, EXAMPLE_DIFF, type ReviewResponse } from "./api";
+
+const REPO_URL = "https://github.com/MarutiDubey/GitOwl";
 
 function App() {
   const [diff, setDiff] = useState("");
@@ -66,23 +71,36 @@ function App() {
 
       <div className="hero">
         <span className="badge">AI-assisted code review</span>
-        <h1>Smarter reviews.<br />Zero setup.</h1>
+        <h1>Smarter PR reviews,<br />on autopilot.</h1>
         <p className="tagline">
-          Paste a diff, get an AI-powered risk score and findings — the same review engine
-          GitOwl posts as a comment on real GitHub pull requests.
+          GitOwl reviews every pull request with AI — flagging bugs, security risks, and
+          scoring overall risk, then posting it as a comment. Add it to any repo in 3 steps.
         </p>
         <div className="hero-actions">
+          <a className="btn-primary" href={REPO_URL} target="_blank" rel="noreferrer">
+            Add to your repo
+          </a>
           <button onClick={handleExample} className="secondary">
-            Load example diff
+            Try the live demo ↓
           </button>
         </div>
       </div>
 
-      <h2>Try it</h2>
-      <DiffInput diff={diff} onChange={setDiff} onSubmit={handleReview} loading={loading} />
+      <HowItWorks />
 
-      {error && <div className="error-box">{error}</div>}
-      {result && <ReviewOutput result={result} />}
+      <Screenshot />
+
+      <section className="try">
+        <h2>Try it live</h2>
+        <p className="try-sub">
+          Paste a diff and see a real GitOwl review right here — no signup, nothing stored.
+        </p>
+        <DiffInput diff={diff} onChange={setDiff} onSubmit={handleReview} loading={loading} />
+        {error && <div className="error-box">{error}</div>}
+        {result && <ReviewOutput result={result} />}
+      </section>
+
+      <Features />
 
       <Setup />
 
