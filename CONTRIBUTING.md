@@ -40,20 +40,20 @@ This repository is currently maintained solo, but is public and open to outside 
 
 Work is built in phases. Please check which phase an issue belongs to before starting — early contributions should stay within the current active phase unless otherwise agreed with the maintainer.
 
-### Phase 1 — MVP (Weeks 1–4): Core Review Engine
-- [ ] GitHub Action trigger on PR open/sync
-- [ ] Diff fetching + compression (handle large PRs without blowing context limits)
-- [ ] Semgrep integration for static analysis
-- [ ] AI-powered `/review` — contextualized findings + reasoning-based observations
-- [ ] Risk scoring (Low / Medium / High) based on files touched and diff size
-- [ ] Structured PR comment output
-- [ ] Basic eval harness (seeded-bug sample repo to measure precision/recall)
+### Phase 1 — MVP (Weeks 1–4): Core Review Engine ✅ COMPLETE
+- [x] GitHub Action trigger on PR open/sync
+- [x] Diff fetching + compression (handle large PRs without blowing context limits)
+- [x] Semgrep integration for static analysis
+- [x] AI-powered `/review` — contextualized findings + reasoning-based observations
+- [x] Risk scoring (Low / Medium / High) based on files touched and diff size
+- [x] Structured PR comment output
+- [x] Basic eval harness (seeded-bug sample repo to measure precision/recall)
 
-### Phase 2 (Weeks 5–6): Enhanced Review Features
-- [ ] `/describe` — auto-generated PR summary/description
-- [ ] Fix suggestions (committable code suggestions, not auto-applied)
-- [ ] Config file support (`.devguard.toml`) for tunable severity thresholds
-- [ ] Cost/latency logging per review call
+### Phase 2 (Weeks 5–6): Enhanced Review Features ✅ COMPLETE
+- [x] `/describe` — auto-generated PR summary/description
+- [x] Fix suggestions (committable code suggestions, not auto-applied) — summary block + inline (`--suggest`)
+- [x] Config file support (`.devguard.toml`) for tunable severity thresholds
+- [x] Cost/latency logging per review call
 
 ### Phase 3 (Future): Dashboard & Analytics
 - [ ] Web dashboard (React/Next.js) showing PR review history
