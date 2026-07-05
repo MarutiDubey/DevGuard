@@ -25,21 +25,21 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Lint (ruff)
-        run: ruff check devguard tests
+        run: ruff check gitowl tests
 
       - name: Format check (black + isort)
         run: |
-          black --check devguard tests
-          isort --check-only devguard tests
+          black --check gitowl tests
+          isort --check-only gitowl tests
 
       - name: Type check (mypy)
-        run: mypy devguard
+        run: mypy gitowl
 
       - name: Tests (pytest + coverage)
-        run: pytest --cov=devguard --cov-report=term-missing
+        run: pytest --cov=gitowl --cov-report=term-missing
 
       - name: Eval gate (precision/recall F1 ≥ 0.80)
-        run: python -m devguard.eval --fail-under 0.80
+        run: python -m gitowl.eval --fail-under 0.80
 
   security:
     name: Security scan
@@ -62,4 +62,4 @@ jobs:
         run: pip-audit -r requirements.txt || true  # report, don't block MVP
 
       - name: Static analysis (semgrep)
-        run: semgrep --config auto --error --quiet devguard || true
+        run: semgrep --config auto --error --quiet gitowl || true

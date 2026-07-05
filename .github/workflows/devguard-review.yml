@@ -1,6 +1,6 @@
-name: DevGuard Review
+name: GitOwl Review
 
-# Runs DevGuard against the pull request and posts a review comment.
+# Runs GitOwl against the pull request and posts a review comment.
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -26,12 +26,12 @@ jobs:
           python-version: "3.11"
           cache: pip
 
-      - name: Install DevGuard
+      - name: Install GitOwl
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run DevGuard review
+      - name: Run GitOwl review
         if: ${{ secrets.AI_API_KEY != '' }}
         env:
           # Provided by the repo/org secrets. Defaults to OpenRouter.
@@ -41,7 +41,7 @@ jobs:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python -m devguard.cli review-pr \
+          python -m gitowl.cli review-pr \
             "${{ github.repository }}" \
             "${{ github.event.pull_request.number }}" \
             --post
