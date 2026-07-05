@@ -179,7 +179,7 @@ def _post_check_run_best_effort(
         client.post_check_run(  # type: ignore[attr-defined]
             repo=repo,
             sha=sha,
-            conclusion=_risk_conclusion(result),  # type: ignore[arg-type]
+            conclusion=_risk_conclusion(result),
             title=_check_title(result),
             summary=body,  # full Markdown review shown in Details panel
         )
