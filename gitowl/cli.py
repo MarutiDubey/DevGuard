@@ -1,4 +1,4 @@
-﻿"""GitOwl command-line interface.
+"""GitOwl command-line interface.
 
 Subcommands:
   review-diff   Review a unified diff from a file or stdin (prints Markdown).
@@ -17,7 +17,7 @@ from pathlib import Path
 from gitowl import __version__
 from gitowl.ai_client.base import AIProviderError
 from gitowl.ai_client.registry import available_providers
-from gitowl.comment import render_comment
+from gitowl.comment import render_comment, render_error_comment
 from gitowl.config import Config, ConfigError, load_config
 from gitowl.describe import describe_diff, merge_into_body, render_description
 from gitowl.logging_config import get_logger, setup_logging
@@ -93,13 +93,21 @@ def cmd_review_pr(args: argparse.Namespace, config: Config) -> int:
         diff_text = client.fetch_pr_diff(args.repo, args.pr)
     except GitHubError as exc:
         logger.error("%s", exc)
+        if args.post:
+            _post_error(client, args, f"GitHub API error: {exc}")
         return 2
 
     if not diff_text.strip():
         review = empty_review("Empty diff — nothing to review.")
     else:
         findings = [] if args.no_semgrep else _run_semgrep_if_available(diff_text, config)
-        review = review_diff(diff_text, config, semgrep_findings=findings)
+        try:
+            review = review_diff(diff_text, config, semgrep_findings=findings)
+        except AIProviderError as exc:
+            logger.error("AI provider error: %s", exc)
+            if args.post:
+                _post_error(client, args, str(exc))
+            return 3
 
     body = render_comment(review.result, review.stats)
     if args.post:
@@ -118,6 +126,18 @@ def cmd_review_pr(args: argparse.Namespace, config: Config) -> int:
     else:
         print(body)
     return 0
+
+
+def _post_error(client: object, args: argparse.Namespace, msg: str) -> None:
+    """Best-effort: post a branded error comment on the PR so it's visible."""
+    from gitowl.github_client import GitHubClient, GitHubError
+
+    assert isinstance(client, GitHubClient)
+    try:
+        client.post_or_update_comment(args.repo, args.pr, render_error_comment(msg))
+    except GitHubError:
+        pass  # swallow — we're already in an error path
+
 
 
 def cmd_describe_diff(args: argparse.Namespace, config: Config) -> int:

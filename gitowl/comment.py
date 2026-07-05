@@ -1,4 +1,4 @@
-﻿"""Render a :class:`ReviewResult` as a structured Markdown PR comment."""
+"""Render a :class:`ReviewResult` as a structured Markdown PR comment."""
 
 from __future__ import annotations
 
@@ -20,6 +20,14 @@ _SEVERITY_ICON = {
 # Marker so GitOwl can find and update its own previous comment on a PR.
 COMMENT_MARKER = "<!-- gitowl-review -->"
 
+# Branded header shown at the top of every PR comment (mirrors CodeRabbit style).
+_HEADER = (
+    """<a href="https://github.com/MarutiDubey/GitOwl">"""
+    """<img src="https://raw.githubusercontent.com/MarutiDubey/GitOwl/main/docs/logo.svg" """
+    """height="28" alt="GitOwl" /></a> """
+    """**GitOwl Review**"""
+)
+
 
 def _finding_line(f: Finding) -> str:
     icon = _SEVERITY_ICON.get(f.severity, "•")
@@ -33,11 +41,33 @@ def _finding_line(f: Finding) -> str:
     return line
 
 
+def render_error_comment(error_msg: str) -> str:
+    """Build a branded error comment so API failures are visible on the PR."""
+    return "\n".join([
+        COMMENT_MARKER,
+        _HEADER,
+        "",
+        "---",
+        "",
+        "⚠️ **GitOwl could not complete the review.**",
+        "",
+        f"**Error:** `{error_msg}`",
+        "",
+        "**Common fixes:**",
+        "- Check that `AI_API_KEY` is set in *Settings → Secrets and variables → Actions*.",
+        "- Verify your API key is valid and has sufficient credits.",
+        "- Check the [Actions log](../../actions) for the full error trace.",
+        "",
+        "---",
+        "_[GitOwl](https://github.com/MarutiDubey/GitOwl) · open an issue if this persists_",
+    ])
+
+
 def render_comment(result: ReviewResult, stats: DiffStats) -> str:
     """Build the full Markdown comment body."""
     lines: list[str] = [
         COMMENT_MARKER,
-        "## 🛡️ GitOwl Review",
+        _HEADER,
         "",
         f"**Risk:** {_RISK_BADGE.get(result.risk, result.risk.value)}  ·  "
         f"**Files changed:** {stats.files_changed}  ·  "
