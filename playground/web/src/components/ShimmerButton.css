@@ -1,0 +1,102 @@
+.shimmer-button {
+  --speed: 3s;
+  --cut: 0.08em;
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 26px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--shimmer-bg);
+  transform: translateZ(0);
+  transition: transform 0.3s ease;
+}
+
+.shimmer-button:active {
+  transform: translateY(1px);
+}
+
+/* Rotating conic-gradient spark that rides the perimeter. */
+.shimmer-spark {
+  position: absolute;
+  inset: 0;
+  z-index: -30;
+  overflow: visible;
+  filter: blur(2px);
+  container-type: size;
+}
+
+.shimmer-spark-inner {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: 1;
+  height: 100cqh;
+  animation: shimmer-slide var(--speed) ease-in-out infinite alternate;
+}
+
+.shimmer-spark-inner::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  width: auto;
+  animation: shimmer-spin calc(var(--speed) * 2) infinite linear;
+  background: conic-gradient(
+    from calc(270deg - (90deg * 0.5)),
+    transparent 0,
+    var(--shimmer-color) 90deg,
+    transparent 90deg
+  );
+}
+
+/* Opaque inner mask so only the thin perimeter shows. */
+.shimmer-backdrop {
+  position: absolute;
+  inset: var(--cut);
+  z-index: -20;
+  border-radius: 999px;
+  background: var(--shimmer-bg);
+}
+
+.shimmer-label {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+  }
+}
+
+@keyframes shimmer-spin {
+  0% {
+    transform: rotate(0);
+  }
+  15%,
+  35% {
+    transform: rotate(90deg);
+  }
+  65%,
+  85% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-spark-inner,
+  .shimmer-spark-inner::before {
+    animation: none;
+  }
+}

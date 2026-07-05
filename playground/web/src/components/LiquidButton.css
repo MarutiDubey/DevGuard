@@ -1,0 +1,55 @@
+.liquid-button {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid var(--liquid-color);
+  padding: 12px 26px;
+  color: var(--liquid-color);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  background: var(--liquid-bg);
+  transition:
+    color 0.4s ease,
+    transform 0.15s ease;
+}
+
+.liquid-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: var(--liquid-color);
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.liquid-button:hover {
+  color: #fff;
+}
+
+.liquid-button:hover .liquid-fill {
+  transform: translateY(0);
+}
+
+.liquid-button:active {
+  transform: scale(0.97);
+}
+
+.liquid-label {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-fill {
+    transition: none;
+  }
+}

@@ -10,10 +10,11 @@ import { reviewDiff, ReviewApiError, EXAMPLE_DIFF, type ReviewResponse } from ".
 import { CustomCursor } from "./components/CustomCursor";
 import ScrollFloat from "./components/ScrollFloat";
 import ClickSpark from "./components/ClickSpark";
-import GradualBlur from "./components/GradualBlur";
 import BlurText from "./components/BlurText";
 import TextType from "./components/TextType";
 import GooeyNav from "./components/GooeyNav";
+import { ShimmerButton } from "./components/ShimmerButton";
+import { LiquidButton } from "./components/LiquidButton";
 
 const REPO_URL = "https://github.com/MarutiDubey/GitOwl";
 
@@ -63,6 +64,7 @@ function App() {
     setDiff(EXAMPLE_DIFF);
     setResult(null);
     setError(null);
+    document.getElementById("try")?.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
@@ -124,16 +126,14 @@ function App() {
               <br />
               on autopilot.
             </motion.h1>
-            <motion.div variants={item}>
-              <BlurText
-                text="GitOwl reviews every pull request with AI — flagging bugs, security risks, and scoring overall risk, then posting it as a comment."
-                animateBy="words"
-                direction="top"
-                delay={80}
-                stepDuration={0.4}
-                className="tagline"
-              />
-            </motion.div>
+            <BlurText
+              text="GitOwl reviews every pull request with AI — flagging bugs, security risks, and scoring overall risk, then posting it as a comment."
+              animateBy="words"
+              direction="top"
+              delay={80}
+              stepDuration={0.4}
+              className="tagline"
+            />
             <motion.p className="tagline-type" variants={item}>
               Add it to any repo in 3 steps.{" "}
               <TextType
@@ -148,12 +148,12 @@ function App() {
               />
             </motion.p>
             <motion.div className="hero-actions" variants={item}>
-              <a className="btn-primary" href={REPO_URL} target="_blank" rel="noreferrer">
+              <ShimmerButton href={REPO_URL} background="#1e3a8a" shimmerColor="#8ab4ff">
                 Add to your repo
-              </a>
-              <button onClick={handleExample} className="secondary">
+              </ShimmerButton>
+              <LiquidButton onClick={handleExample} color="#8ab4ff">
                 Try the live demo ↓
-              </button>
+              </LiquidButton>
             </motion.div>
           </div>
         </motion.div>
@@ -206,8 +206,6 @@ function App() {
           </a>
         </footer>
       </div>
-
-      <GradualBlur preset="page-footer" opacity={1} strength={2.5} />
     </ClickSpark>
   );
 }
