@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ScrollFloat from "./ScrollFloat";
+import GlitchText from "./GlitchText";
 
 const WORKFLOW_LINES = [
   { type: "comment", text: "# .github/workflows/gitowl-review.yml" },
@@ -71,16 +71,14 @@ export function Setup() {
 
   return (
     <section className="setup">
-      <ScrollFloat
-        animationDuration={1}
-        ease="back.inOut(2)"
-        scrollStart="center bottom+=50%"
-        scrollEnd="bottom bottom-=40%"
-        stagger={0.04}
-        textClassName="setup-heading"
+      <GlitchText
+        speed={1}
+        enableShadows={true}
+        enableOnHover={false}
+        className="setup-heading"
       >
         Use it on your own repo
-      </ScrollFloat>
+      </GlitchText>
       <p>Get automated AI review comments on every pull request — 3 steps:</p>
       <ol className="setup-steps">
         <li>

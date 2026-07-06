@@ -54,11 +54,13 @@ export function Features() {
         ease="power3.out"
         stagger={0.13}
         threshold={0.1}
-        triggerOnce={true}
+        triggerOnce={false}
         triggerOnHover={true}
         respectReducedMotion={true}
         textAlign="left"
         scrambleCharset="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*"
+        loop={true}
+        loopDelay={3000}
       />
       <div className="features-grid">
         {FEATURES.map((f) => (

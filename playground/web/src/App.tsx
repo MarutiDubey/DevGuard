@@ -11,18 +11,29 @@ import { CustomCursor } from "./components/CustomCursor";
 import ScrollFloat from "./components/ScrollFloat";
 import ClickSpark from "./components/ClickSpark";
 import BlurText from "./components/BlurText";
+import FuzzyText from "./components/FuzzyText";
 import TextType from "./components/TextType";
-import GooeyNav from "./components/GooeyNav";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "./components/ResizableNavbar";
 import { ShimmerButton } from "./components/ShimmerButton";
 import { LiquidButton } from "./components/LiquidButton";
 
 const REPO_URL = "https://github.com/MarutiDubey/GitOwl";
 
 const NAV_ITEMS = [
-  { label: "How it works", href: "#how" },
-  { label: "Try it live", href: "#try" },
-  { label: "Features", href: "#features" },
-  { label: "Setup", href: "#setup" },
+  { name: "How it works", link: "#how" },
+  { name: "Try it live", link: "#try" },
+  { name: "Features", link: "#features" },
+  { name: "Setup", link: "#setup" },
 ];
 
 
@@ -44,6 +55,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ReviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   async function handleReview() {
     setLoading(true);
@@ -76,37 +88,52 @@ function App() {
       duration={500}
     >
       <CustomCursor />
-      <header className="site-header">
-        <div className="logo-row">
-          <div className="owl-icon" aria-hidden="true">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="50" cy="50" r="50" fill="#1e3a8a" />
-              <ellipse cx="50" cy="62" rx="20" ry="22" fill="white" />
-              <circle cx="40" cy="44" r="11" fill="white" />
-              <circle cx="60" cy="44" r="11" fill="white" />
-              <circle cx="40" cy="44" r="5" fill="#1e3a8a" />
-              <circle cx="60" cy="44" r="5" fill="#1e3a8a" />
-              <circle cx="42" cy="42" r="1.5" fill="white" />
-              <circle cx="62" cy="42" r="1.5" fill="white" />
-              <polygon points="50,51 46,57 54,57" fill="#1e3a8a" />
-              <polygon points="34,36 30,24 40,32" fill="white" />
-              <polygon points="66,36 70,24 60,32" fill="white" />
-              <ellipse cx="28" cy="66" rx="8" ry="14" fill="white" transform="rotate(-15 28 66)" />
-              <ellipse cx="72" cy="66" rx="8" ry="14" fill="white" transform="rotate(15 72 66)" />
-            </svg>
+      <Navbar>
+        {/* Desktop Navigation */}
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={NAV_ITEMS} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <NavbarButton href={REPO_URL} variant="primary">GitHub</NavbarButton>
           </div>
-          <span className="site-name">GitOwl</span>
-        </div>
-        <GooeyNav
-          items={NAV_ITEMS}
-          particleCount={12}
-          animationTime={500}
-          initialActiveIndex={0}
-        />
-        <a className="gh-link" href={REPO_URL} target="_blank" rel="noreferrer">
-          GitHub →
-        </a>
-      </header>
+        </NavBody>
+
+        {/* Mobile Navigation */}
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {NAV_ITEMS.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="res-nav-mobile-link"
+              >
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+              <NavbarButton
+                href={REPO_URL}
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="primary"
+              >
+                GitHub
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
 
       {/* ── Hero — full-bleed, orb is NOW interactive foreground ── */}
       <section className="hero">
@@ -121,14 +148,32 @@ function App() {
             <motion.span className="badge" variants={item}>
               AI-assisted code review
             </motion.span>
-            <BlurText
-              text="Smarter PR reviews, on autopilot."
-              animateBy="words"
-              direction="top"
-              delay={100}
-              stepDuration={0.5}
-              className="hero-h1-blur"
-            />
+            <div className="hero-h1-fuzzy">
+              <FuzzyText
+                fontSize="clamp(48px, 8vw, 84px)"
+                fontWeight={800}
+                color="#ffffff"
+                baseIntensity={0.15}
+                hoverIntensity={0.55}
+                enableHover={true}
+                fuzzRange={28}
+                transitionDuration={8}
+              >
+                Smarter PR reviews,
+              </FuzzyText>
+              <FuzzyText
+                fontSize="clamp(48px, 8vw, 84px)"
+                fontWeight={800}
+                color="#ffffff"
+                baseIntensity={0.15}
+                hoverIntensity={0.55}
+                enableHover={true}
+                fuzzRange={28}
+                transitionDuration={8}
+              >
+                on autopilot.
+              </FuzzyText>
+            </div>
             <BlurText
               text="GitOwl reviews every pull request with AI — flagging bugs, security risks, and scoring overall risk, then posting it as a comment."
               animateBy="words"

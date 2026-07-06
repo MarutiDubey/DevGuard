@@ -1,12 +1,13 @@
 .glitch {
   color: inherit;
   font-size: inherit;
-  white-space: nowrap;
+  white-space: normal;
   font-weight: inherit;
   position: relative;
   margin: 0 auto;
   user-select: none;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .glitch::after,
