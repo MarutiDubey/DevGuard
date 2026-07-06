@@ -1,3 +1,4 @@
+import { useRef, UIEvent, useMemo } from "react";
 import { EXAMPLES, type Example } from "../api";
 
 interface DiffInputProps {
@@ -15,6 +16,36 @@ const RISK_DOT: Record<Example["expectedRisk"], string> = {
 };
 
 export function DiffInput({ diff, onChange, onSubmit, loading }: DiffInputProps) {
+  const preRef = useRef<HTMLPreElement>(null);
+
+  const handleScroll = (e: UIEvent<HTMLTextAreaElement>) => {
+    if (preRef.current) {
+      preRef.current.scrollTop = e.currentTarget.scrollTop;
+      preRef.current.scrollLeft = e.currentTarget.scrollLeft;
+    }
+  };
+
+  const highlightedLines = useMemo(() => {
+    if (!diff) return null;
+    return diff.split("\n").map((line, i) => {
+      let className = "diff-line";
+      if (line.startsWith("+") && !line.startsWith("+++")) {
+        className += " diff-add";
+      } else if (line.startsWith("-") && !line.startsWith("---")) {
+        className += " diff-remove";
+      } else if (line.startsWith("@@")) {
+        className += " diff-meta";
+      } else if (line.startsWith("diff --git") || line.startsWith("index ") || line.startsWith("+++") || line.startsWith("---")) {
+        className += " diff-header";
+      }
+      return (
+        <span key={i} className={className}>
+          {line || " "}
+        </span>
+      );
+    });
+  }, [diff]);
+
   return (
     <>
       <div className="examples">
@@ -45,12 +76,21 @@ export function DiffInput({ diff, onChange, onSubmit, loading }: DiffInputProps)
           </div>
           <span className="editor-title">diff.patch</span>
         </div>
-        <textarea
-          value={diff}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="…or paste a unified diff (git diff output) here"
-          spellCheck={false}
-        />
+        
+        <div className="diff-editor-container">
+          <pre ref={preRef} aria-hidden="true">
+            {highlightedLines}
+            {/* Add an extra line at the end to match textarea behavior when ending with newline */}
+            {diff.endsWith("\n") ? <span className="diff-line"> </span> : null}
+          </pre>
+          <textarea
+            value={diff}
+            onChange={(e) => onChange(e.target.value)}
+            onScroll={handleScroll}
+            placeholder="…or paste a unified diff (git diff output) here"
+            spellCheck={false}
+          />
+        </div>
       </div>
 
       <div className="actions">

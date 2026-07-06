@@ -409,19 +409,13 @@ a {
   text-align: center;
 }
 
-.code-editor-wrapper textarea {
+.diff-editor-container {
+  position: relative;
   width: 100%;
   min-height: 400px;
-  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
-  font-size: 13px;
-  line-height: 1.6;
-  color: #d4d4d4;
-  background: #1e1e1e;
-  border: none;
-  border-radius: 0;
-  padding: 16px 16px 16px 60px;
   resize: vertical;
-  box-shadow: none;
+  overflow: hidden;
+  background: #1e1e1e;
   background-image: 
     linear-gradient(to right, #252526 50px, transparent 50px),
     repeating-linear-gradient(
@@ -436,15 +430,72 @@ a {
   background-attachment: local, local;
 }
 
-.code-editor-wrapper textarea:focus {
-  outline: none;
-  box-shadow: none;
+.diff-editor-container textarea,
+.diff-editor-container pre {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 16px 16px 16px 60px;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 25px;
   border: none;
+  white-space: pre;
+  tab-size: 4;
 }
 
-.code-editor-wrapper textarea::placeholder {
+.diff-editor-container textarea {
+  color: transparent;
+  caret-color: white;
+  background: transparent;
+  z-index: 2;
+  resize: none;
+  outline: none;
+  box-shadow: none;
+  overflow: auto;
+}
+
+.diff-editor-container textarea::placeholder {
   color: #6a737d;
   font-style: italic;
+}
+
+.diff-editor-container pre {
+  color: #d4d4d4;
+  z-index: 1;
+  pointer-events: none;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* Diff syntax highlighting colors */
+.diff-line {
+  display: block;
+  min-height: 25px;
+  margin-left: -60px;
+  padding-left: 60px;
+}
+
+.diff-add {
+  background-color: rgba(46, 160, 67, 0.15);
+  color: #7ee787;
+}
+
+.diff-remove {
+  background-color: rgba(248, 81, 73, 0.15);
+  color: #ffa198;
+}
+
+.diff-meta {
+  color: #79c0ff;
+}
+
+.diff-header {
+  color: #8b949e;
+  font-weight: bold;
 }
 
 /* Remove old textarea styles */
