@@ -30,7 +30,19 @@ before a human ever opens the diff.
 
 ---
 
-## What it does
+## 📑 Table of Contents
+- [✨ What it does](#-what-it-does)
+- [🚀 Highlights](#-highlights)
+- [⚡ Add GitOwl to your repo](#-add-gitowl-to-your-repo-in-3-steps)
+- [🛠️ Tech stack](#️-tech-stack)
+- [📦 Install & use locally](#-install--use-locally)
+- [⚙️ Configuration](#️-configuration-gitowltoml)
+- [🏗️ How it's built](#️-how-its-built)
+- [📄 License](#-license)
+
+---
+
+## ✨ What it does
 
 Open a pull request and GitOwl does the first review pass for you:
 
@@ -50,7 +62,7 @@ that actually matter.
 
 ---
 
-## Highlights
+## 🚀 Highlights
 
 | | Feature |
 |---|---|
@@ -97,7 +109,7 @@ automatically. That's it.
 
 ---
 
-## Tech stack
+## 🛠️ Tech stack
 
 | Layer | Tools |
 |---|---|
@@ -110,7 +122,7 @@ automatically. That's it.
 
 ---
 
-## Install & use locally
+## 📦 Install & use locally
 
 ```bash
 pip install gitowl          # or:  pip install "gitowl[semgrep]"
@@ -146,7 +158,7 @@ AI_PROVIDER=openrouter            # openrouter | openai | ollama
 
 ---
 
-## Configuration (`.gitowl.toml`)
+## ⚙️ Configuration (`.gitowl.toml`)
 
 Drop a `.gitowl.toml` at your repo root to set project-wide review policy. It's
 committed, so the whole team shares the same rules:
@@ -166,7 +178,7 @@ wins for a single run. API keys are never read from this file.
 
 ---
 
-## How it's built
+## 🏗️ How it's built
 
 GitOwl ships as three coordinated pieces:
 
@@ -193,12 +205,15 @@ python -m gitowl.eval    # measure review quality (offline, no key)
 
 ---
 
-## License
+## 📄 License
 
 [MIT](LICENSE) — free to use, modify, and build on.
 
 <div align="center">
 
-**[🔗 Live demo](https://gitowl.vercel.app)** &nbsp;·&nbsp; **[📦 PyPI](https://pypi.org/project/gitowl/)** &nbsp;·&nbsp; Built by **[Manthan Dubey](https://github.com/MarutiDubey)**
+**[🔗 Live demo](https://gitowl.vercel.app)** &nbsp;·&nbsp; **[📦 PyPI](https://pypi.org/project/gitowl/)**
+
+<br />
+Built with ❤️ by **[Manthan Dubey](https://github.com/MarutiDubey)** with the help of **Devlooper**
 
 </div>
