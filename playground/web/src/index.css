@@ -37,6 +37,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -134,7 +138,12 @@ body {
 /* ── Layout ── */
 #root {
   width: 100%;
-  /* no max-width — full bleed */
+}
+
+/* Smooth section transitions */
+section {
+  scroll-margin-top: 80px;
+  position: relative;
 }
 
 /* Readable text sections get a max-width container */
@@ -144,9 +153,26 @@ body {
   padding: 0 48px 96px;
 }
 
+.page-content > div {
+  margin-bottom: 120px;
+}
+
+.page-content > div:last-of-type {
+  margin-bottom: 0;
+}
+
 @media (max-width: 720px) {
   .page-content {
     padding: 0 20px 72px;
+  }
+  
+  section {
+    min-height: auto !important;
+    padding-top: 60px !important;
+  }
+  
+  .hero {
+    min-height: 100vh;
   }
 }
 
@@ -233,12 +259,13 @@ a {
 .hero {
   position: relative;
   width: 100%;
-  min-height: 92vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   margin-bottom: 0;
+  scroll-margin-top: 0;
 }
 
 /* Orb: NOW full-bleed foreground, interactive */
@@ -331,7 +358,96 @@ a {
   transform: scale(0.98);
 }
 
-/* ── Textarea ── */
+/* ── Code Editor Style Textarea ── */
+.code-editor-wrapper {
+  border: 1px solid #333333;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: #1e1e1e;
+  margin-bottom: 20px;
+}
+
+.code-editor-header {
+  background: #2d2d2d;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #333333;
+}
+
+.editor-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.editor-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.editor-dot.red {
+  background: #ff5f57;
+}
+
+.editor-dot.yellow {
+  background: #febc2e;
+}
+
+.editor-dot.green {
+  background: #28c840;
+}
+
+.editor-title {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #888;
+  flex: 1;
+  text-align: center;
+}
+
+.code-editor-wrapper textarea {
+  width: 100%;
+  min-height: 400px;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  background: #1e1e1e;
+  border: none;
+  border-radius: 0;
+  padding: 16px 16px 16px 60px;
+  resize: vertical;
+  box-shadow: none;
+  background-image: 
+    linear-gradient(to right, #252526 50px, transparent 50px),
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 24px,
+      rgba(255, 255, 255, 0.03) 24px,
+      rgba(255, 255, 255, 0.03) 25px
+    );
+  background-size: 100% 100%, 100% 25px;
+  background-position: 0 0, 0 16px;
+  background-attachment: local, local;
+}
+
+.code-editor-wrapper textarea:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+.code-editor-wrapper textarea::placeholder {
+  color: #6a737d;
+  font-style: italic;
+}
+
+/* Remove old textarea styles */
 textarea {
   width: 100%;
   min-height: 260px;
@@ -637,8 +753,13 @@ button.secondary {
 
 /* ── Setup section ── */
 .setup {
-  margin-top: 72px;
-  padding-top: 40px;
+  margin-top: 0;
+  padding-top: 120px;
+  padding-bottom: 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border-top: 1px solid var(--border);
 }
 
@@ -679,7 +800,12 @@ button.secondary {
 
 /* ── How it works ── */
 .how {
-  margin-top: 72px;
+  margin-top: 0;
+  padding-top: 120px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .how-grid {
@@ -723,7 +849,12 @@ button.secondary {
 
 /* ── Screenshot ── */
 .shot {
-  margin-top: 72px;
+  margin-top: 0;
+  padding-top: 120px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
 }
 
@@ -748,7 +879,12 @@ button.secondary {
 
 /* ── Try it live ── */
 .try {
-  margin-top: 80px;
+  margin-top: 0;
+  padding-top: 120px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .try-sub {
@@ -803,7 +939,12 @@ button.secondary {
 
 /* ── Features ── */
 .features {
-  margin-top: 80px;
+  margin-top: 0;
+  padding-top: 120px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Shuffle heading for Features */
@@ -835,6 +976,10 @@ button.secondary {
 .feature-icon {
   font-size: 24px;
   margin-bottom: 10px;
+  color: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .feature h3 {

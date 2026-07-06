@@ -31,7 +31,7 @@ const REPO_URL = "https://github.com/MarutiDubey/GitOwl";
 
 const NAV_ITEMS = [
   { name: "How it works", link: "#how" },
-  { name: "Try it live", link: "#try" },
+  { name: "Demo", link: "#try" },
   { name: "Features", link: "#features" },
   { name: "Setup", link: "#setup" },
 ];

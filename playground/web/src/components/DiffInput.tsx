@@ -36,12 +36,22 @@ export function DiffInput({ diff, onChange, onSubmit, loading }: DiffInputProps)
         ))}
       </div>
 
-      <textarea
-        value={diff}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="…or paste a unified diff (git diff output) here"
-        spellCheck={false}
-      />
+      <div className="code-editor-wrapper">
+        <div className="code-editor-header">
+          <div className="editor-dots">
+            <span className="editor-dot red"></span>
+            <span className="editor-dot yellow"></span>
+            <span className="editor-dot green"></span>
+          </div>
+          <span className="editor-title">diff.patch</span>
+        </div>
+        <textarea
+          value={diff}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="…or paste a unified diff (git diff output) here"
+          spellCheck={false}
+        />
+      </div>
 
       <div className="actions">
         <button type="button" onClick={onSubmit} disabled={loading || !diff.trim()}>
