@@ -127,6 +127,33 @@ const GooeyNav = ({
     return () => resizeObserver.disconnect();
   }, [activeIndex]);
 
+  // ScrollSpy: observe sections and update activeIndex
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = `#${entry.target.id}`;
+            const index = items.findIndex(item => item.href === id);
+            if (index !== -1) {
+              setActiveIndex(index);
+            }
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -40% 0px' }
+    );
+
+    items.forEach(item => {
+      if (item.href.startsWith('#')) {
+        const el = document.querySelector(item.href);
+        if (el) observer.observe(el);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [items]);
+
   return (
     <div className="gooey-nav-container" ref={containerRef}>
       <nav>

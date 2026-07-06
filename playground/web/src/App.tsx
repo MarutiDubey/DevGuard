@@ -208,33 +208,29 @@ function App() {
       </section>
 
       <div className="page-content">
-        <Reveal>
-          <section id="how"><HowItWorks /></section>
-        </Reveal>
+        <section id="how"><HowItWorks /></section>
 
         <Reveal>
           <section id="screenshot"><Screenshot /></section>
         </Reveal>
 
-        <Reveal>
-          <section id="try" className="try">
-            <ScrollFloat
-              animationDuration={1}
-              ease="back.inOut(2)"
-              stagger={0.04}
-              textClassName="try-heading"
-            >
-              Try it live
-            </ScrollFloat>
-            <p className="try-sub">
-              Pick an example or paste a diff — see a real GitOwl review right here. No signup,
-              nothing stored.
-            </p>
-            <DiffInput diff={diff} onChange={setDiff} onSubmit={handleReview} loading={loading} />
-            {error && <div className="error-box">{error}</div>}
-            {result && <ReviewOutput result={result} />}
-          </section>
-        </Reveal>
+        <section id="try" className="try">
+          <ScrollFloat
+            animationDuration={1}
+            ease="back.inOut(2)"
+            stagger={0.04}
+            textClassName="try-heading"
+          >
+            Try it live
+          </ScrollFloat>
+          <p className="try-sub">
+            Pick an example or paste a diff — see a real GitOwl review right here. No signup,
+            nothing stored.
+          </p>
+          <DiffInput diff={diff} onChange={setDiff} onSubmit={handleReview} loading={loading} />
+          {error && <div className="error-box">{error}</div>}
+          {result && <ReviewOutput result={result} />}
+        </section>
 
         <Reveal>
           <section id="features"><Features /></section>

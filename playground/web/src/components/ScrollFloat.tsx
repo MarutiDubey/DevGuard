@@ -72,7 +72,7 @@ export default function ScrollFloat({
             scroller,
             start: scrollStart,
             end: scrollEnd,
-            scrub: true,
+            scrub: 0.6,
           },
         }
       );
