@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/owl.png" alt="GitOwl logo" width="120" height="120" />
+  <img src="docs/owl_round.png" alt="GitOwl logo" width="120" height="120" />
 
   # GitOwl
   **AI-powered code review that lives inside your pull requests.**
@@ -49,12 +49,6 @@ Open a pull request and GitOwl does the first review pass for you:
 > **Try it in your browser first:** paste any diff into the
 > **[live playground](https://gitowl.vercel.app)** and watch GitOwl review it in
 > real time — no install, no signup.
-
-<br/>
-
-<div align="center">
-  <img src="docs/demo.gif" alt="GitOwl Action Demo" width="100%" />
-</div>
 
 ---
 
