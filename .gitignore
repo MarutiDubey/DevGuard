@@ -74,3 +74,11 @@ review_output/
 node_modules/
 .next/
 out/
+
+# ---- Agent & IDE Files ----
+.agents/
+AGENTS.md
+GEMINI.md
+PROJECT_BRAIN.md
+session-history-*.md
+CONTRIBUTING.md
