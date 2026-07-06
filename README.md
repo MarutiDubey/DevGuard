@@ -1,40 +1,35 @@
 <div align="center">
+  <img src="docs/owl.png" alt="GitOwl logo" width="120" height="120" />
 
-<img src="docs/owl.png" alt="GitOwl logo" width="120" height="120" />
+  # GitOwl
+  **AI-powered code review that lives inside your pull requests.**
 
-# GitOwl
+  *A robust, provider-agnostic engine that flags bugs, scores risk, and posts structured reviews before a human ever opens the diff.*
+  <br/>
+  **Original Concept and Development by Manthan Dubey**
 
-### AI-powered code review that lives inside your pull requests
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-gitowl.vercel.app-1e3a8a?style=for-the-badge)](https://gitowl.vercel.app)
+  [![PyPI](https://img.shields.io/pypi/v/gitowl?style=for-the-badge&color=1e3a8a&label=PyPI)](https://pypi.org/project/gitowl/)
+  [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-GitOwl reviews every pull request automatically — flagging bugs, security risks,
-and code smells, scoring overall risk, and posting a structured review comment
-before a human ever opens the diff.
+  <br/>
 
-<p>
-  <a href="https://gitowl.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-gitowl.vercel.app-1e3a8a?style=for-the-badge" /></a>
-  <a href="https://pypi.org/project/gitowl/"><img alt="PyPI" src="https://img.shields.io/pypi/v/gitowl?style=for-the-badge&color=1e3a8a&label=PyPI" /></a>
-</p>
+  > Instead of a human reviewer starting from a cold diff, the team gets an AI summary of what changed, a prioritized list of issues with reasoning, one-click fix suggestions, and an overall risk score — so review time goes to the changes that actually matter.
 
-<p>
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" />
-  <img alt="Tests" src="https://img.shields.io/badge/tests-166_passing-2ea043" />
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue" />
-  <img alt="Type checked" src="https://img.shields.io/badge/mypy-strict-informational" />
-</p>
+  <br/>
 
-**[🔗 Try the live demo](https://gitowl.vercel.app)** &nbsp;·&nbsp;
-**[📦 Install from PyPI](https://pypi.org/project/gitowl/)** &nbsp;·&nbsp;
-**[⚡ Add to your repo](#-add-gitowl-to-your-repo-in-3-steps)**
+  [**Live Playground**](https://gitowl.vercel.app) | [**Install**](#-install--use-locally) | [**GitHub Action**](#-add-gitowl-to-your-repo-in-3-steps) | [**Report Bug**](https://github.com/MarutiDubey/GitOwl/issues)
 
 </div>
 
 ---
 
 ## 📑 Table of Contents
-- [✨ What it does](#-what-it-does)
-- [🚀 Highlights](#-highlights)
+- [✨ Overview](#-overview)
+- [🚀 Key Features](#-key-features)
 - [⚡ Add GitOwl to your repo](#-add-gitowl-to-your-repo-in-3-steps)
-- [🛠️ Tech stack](#️-tech-stack)
+- [🛠️ Tech Stack](#️-tech-stack)
 - [📦 Install & use locally](#-install--use-locally)
 - [⚙️ Configuration](#️-configuration-gitowltoml)
 - [🏗️ How it's built](#️-how-its-built)
@@ -42,7 +37,7 @@ before a human ever opens the diff.
 
 ---
 
-## ✨ What it does
+## ✨ Overview
 
 Open a pull request and GitOwl does the first review pass for you:
 
@@ -51,30 +46,25 @@ Open a pull request and GitOwl does the first review pass for you:
             →  risk score (Low / Medium / High)  →  structured review comment
 ```
 
-Instead of a human reviewer starting from a cold diff, the team gets an AI
-summary of what changed, a prioritised list of issues with reasoning, one-click
-fix suggestions, and an overall risk score — so review time goes to the changes
-that actually matter.
-
 > **Try it in your browser first:** paste any diff into the
 > **[live playground](https://gitowl.vercel.app)** and watch GitOwl review it in
 > real time — no install, no signup.
 
 ---
 
-## 🚀 Highlights
+## 🚀 Key Features
 
 | | Feature |
 |---|---|
-| 🔎 | **AI code review** — contextual findings with reasoning, not just pattern matches. Filters false positives so the noise stays low. |
-| 🚦 | **Risk scoring** — every PR is scored Low / Medium / High from the files touched and the nature of the change. |
-| ✍️ | **One-click fix suggestions** — confident fixes are posted as GitHub inline suggestions you can commit in a single click. |
-| 📝 | **Auto PR descriptions** — generate a title, summary, and change list straight from the diff. |
-| 🛡️ | **Optional static analysis** — pairs an AI layer with Semgrep when you want both; auto-detected, never required. |
-| ⚙️ | **Team-wide config** — a committed `.gitowl.toml` sets severity thresholds and ignored paths for the whole repo. |
-| 💸 | **Cost & latency tracking** — every review reports token usage, estimated cost, and latency. No surprises on the bill. |
-| 🔌 | **Provider-agnostic** — works with any OpenAI-compatible provider. Bring whichever API key you already have. |
-| 📊 | **Evaluation harness** — precision / recall / F1 measured against a seeded-bug corpus, so quality is a number, not a vibe. |
+| 🔎 | **AI Code Review** — Contextual findings with reasoning, not just pattern matches. Filters false positives so the noise stays low. |
+| 🚦 | **Risk Scoring** — Every PR is scored Low / Medium / High from the files touched and the nature of the change. |
+| ✍️ | **One-Click Fix Suggestions** — Confident fixes are posted as GitHub inline suggestions you can commit in a single click. |
+| 📝 | **Auto PR Descriptions** — Generate a title, summary, and change list straight from the diff. |
+| 🛡️ | **Optional Static Analysis** — Pairs an AI layer with Semgrep when you want both; auto-detected, never required. |
+| ⚙️ | **Team-Wide Config** — A committed `.gitowl.toml` sets severity thresholds and ignored paths for the whole repo. |
+| 💸 | **Cost & Latency Tracking** — Every review reports token usage, estimated cost, and latency. No surprises on the bill. |
+| 🔌 | **Provider-Agnostic** — Works with any OpenAI-compatible provider. Bring whichever API key you already have. |
+| 📊 | **Evaluation Harness** — Precision / recall / F1 measured against a seeded-bug corpus, so quality is a number, not a vibe. |
 
 ---
 
@@ -104,12 +94,13 @@ Use a key from **any OpenAI-compatible provider** you already have.
 **3. Open a pull request** — GitOwl reviews the diff and posts its comment
 automatically. That's it.
 
+> [!NOTE]
 > Want static analysis alongside the AI review? Install with
 > `pip install "gitowl[semgrep]"`.
 
 ---
 
-## 🛠️ Tech stack
+## 🛠️ Tech Stack
 
 | Layer | Tools |
 |---|---|
@@ -153,8 +144,9 @@ AI_MODEL=your-model-name          # e.g. a fast, low-cost chat model
 AI_PROVIDER=openrouter            # openrouter | openai | ollama
 ```
 
-> 🔒 API keys are read only from the environment / `.env` (which is git-ignored)
-> — never from committed config. They never touch the repository.
+> [!IMPORTANT]
+> **API Security**
+> API keys are read only from the environment / `.env` (which is git-ignored) — never from committed config. They never touch the repository.
 
 ---
 
@@ -166,10 +158,10 @@ committed, so the whole team shares the same rules:
 ```toml
 [review]
 min_severity = "warning"                       # info | warning | error
-ignore_paths = ["tests/**", "**/*.md"]          # globs GitOwl won't flag
+ignore_paths = ["tests/**", "**/*.md"]         # globs GitOwl won't flag
 
 [ai]
-model = "your-model-name"                       # pin a model for this repo
+model = "your-model-name"                      # pin a model for this repo
 ```
 
 **Precedence** (low → high): built-in defaults → `.gitowl.toml` → environment
@@ -207,13 +199,10 @@ python -m gitowl.eval    # measure review quality (offline, no key)
 
 ## 📄 License
 
-[MIT](LICENSE) — free to use, modify, and build on.
+This project is licensed under the **[MIT License](LICENSE)** — free to use, modify, and build on.
 
-<div align="center">
+---
 
-**[🔗 Live demo](https://gitowl.vercel.app)** &nbsp;·&nbsp; **[📦 PyPI](https://pypi.org/project/gitowl/)**
-
-<br />
-Developed and maintained by **Manthan Dubey**
-
-</div>
+## 👨‍💻 Built By
+**Manthan Dubey**  
+*Designed for precision, low noise, and a seamless developer experience.*
