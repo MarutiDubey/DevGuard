@@ -86,7 +86,7 @@ export function Setup() {
           <code>.github/workflows/gitowl-review.yml</code>.
         </li>
         <li>
-          <strong>Add a secret</strong> <code>AI_API_KEY</code> (your OpenRouter or OpenAI key)
+          <strong>Add a secret</strong> <code>AI_API_KEY</code> (any working API key for your preferred AI provider, e.g., OpenAI, Anthropic, Google)
           under <em>Settings → Secrets and variables → Actions</em>.
         </li>
         <li>
@@ -130,7 +130,7 @@ export function Setup() {
       </div>
 
       <p className="setup-note">
-        Defaults to OpenRouter + <code>openai/gpt-4o-mini</code>. Want static analysis too? Use{" "}
+        GitOwl supports multiple providers natively. Just provide a valid API key and model name. Want static analysis too? Use{" "}
         <code>pip install "gitowl[semgrep]"</code>.
       </p>
     </section>
