@@ -139,7 +139,7 @@ const Shuffle = ({
         chars.forEach((ch) => {
           const parent = ch.parentElement;
           if (!parent) return;
-          const w = ch.getBoundingClientRect().width;
+          const w = Math.ceil(ch.getBoundingClientRect().width) + 1;
           const h = ch.getBoundingClientRect().height;
           if (!w) return;
 

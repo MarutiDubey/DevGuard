@@ -56,12 +56,12 @@ export function Features() {
         tag="h2"
         className="features-heading"
         shuffleDirection="right"
-        duration={1.2}
+        duration={0.7}
         animationMode="evenodd"
-        shuffleTimes={2}
-        ease="power3.out"
-        stagger={0.13}
-        threshold={0.1}
+        shuffleTimes={1.5}
+        ease="power2.out"
+        stagger={0.05}
+        threshold={0.0}
         triggerOnce={true}
         triggerOnHover={false}
         respectReducedMotion={false}

@@ -1,5 +1,7 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { motion } from "motion/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DiffInput } from "./components/DiffInput";
 import { ReviewOutput } from "./components/ReviewOutput";
 import { HowItWorks } from "./components/HowItWorks";
@@ -37,6 +39,8 @@ const NAV_ITEMS = [
 ];
 
 
+import { IconBrandGithub } from "@tabler/icons-react";
+
 // WebGL orb — lazy so it never blocks first paint.
 const Orb = lazy(() => import("./components/Orb"));
 
@@ -56,6 +60,20 @@ function App() {
   const [result, setResult] = useState<ReviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    // Refresh ScrollTrigger after layout stabilizes to catch anchor jumps
+    const timeoutId = setTimeout(() => ScrollTrigger.refresh(), 200);
+    // Also listen to hash changes for navbar clicks
+    const handleHash = () => setTimeout(() => ScrollTrigger.refresh(), 100);
+    window.addEventListener("hashchange", handleHash);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("hashchange", handleHash);
+    };
+  }, []);
 
   async function handleReview() {
     setLoading(true);
@@ -94,7 +112,14 @@ function App() {
           <NavbarLogo />
           <NavItems items={NAV_ITEMS} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <NavbarButton href={REPO_URL} variant="primary">GitHub</NavbarButton>
+            <NavbarButton
+              href={REPO_URL}
+              variant="primary"
+              aria-label="GitHub"
+              style={{ width: '40px', height: '40px', padding: '0', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <IconBrandGithub size={22} stroke={1.5} />
+            </NavbarButton>
           </div>
         </NavBody>
 
@@ -127,8 +152,12 @@ function App() {
                 href={REPO_URL}
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
+                aria-label="GitHub"
               >
-                GitHub
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <IconBrandGithub size={20} stroke={2} />
+                  GitHub
+                </div>
               </NavbarButton>
             </div>
           </MobileNavMenu>
@@ -216,9 +245,10 @@ function App() {
 
         <section id="try" className="try">
           <ScrollFloat
-            animationDuration={1}
-            ease="back.inOut(2)"
-            stagger={0.04}
+            animationDuration={0.6}
+            ease="back.out(1.4)"
+            stagger={0.02}
+            scrollStart="top 95%"
             textClassName="try-heading"
           >
             Try it live

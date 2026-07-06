@@ -160,7 +160,7 @@ export const MobileNavToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick:
 export const NavbarLogo = () => {
   return (
     <a href="/" className="res-nav-logo">
-      <div className="owl-icon" aria-hidden="true" style={{ width: 32, height: 32 }}>
+      <div className="owl-icon" aria-hidden="true" style={{ width: 44, height: 44 }}>
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
           <circle cx="50" cy="50" r="50" fill="#1e3a8a" />
           <ellipse cx="50" cy="62" rx="20" ry="22" fill="white" />

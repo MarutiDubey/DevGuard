@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ScrollFloat from "./ScrollFloat";
+import BorderGlow from "./BorderGlow";
 
 const STEPS = [
   {
@@ -121,14 +122,22 @@ export function HowItWorks() {
             ref={(el) => { stepRefs.current[i] = el; }}
           >
             {/* Card */}
-            <div className="how-card" style={{ "--step-color": s.color, "--step-glow": s.glow } as React.CSSProperties}>
+            <BorderGlow 
+              className="how-card" 
+              style={{ "--step-color": s.color, "--step-glow": s.glow, "--card-bg": "#0d1117" } as React.CSSProperties}
+              glowColor={s.color}
+              borderRadius={16}
+              glowRadius={60}
+              glowIntensity={1.2}
+              animated={true}
+            >
               <div className="how-card-tag">{s.tag}</div>
               <div className="how-card-icon" style={{ color: s.color }}>
                 {s.icon}
               </div>
               <h3 className="how-card-title">{s.title}</h3>
               <p className="how-card-body">{s.body}</p>
-            </div>
+            </BorderGlow>
 
             {/* Center node */}
             <div className="how-node" style={{ "--step-color": s.color } as React.CSSProperties}>

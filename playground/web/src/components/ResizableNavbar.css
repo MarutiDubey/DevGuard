@@ -85,6 +85,7 @@
   background-color: transparent;
   padding: 8px 0;
 }
+
 .res-nav-mobile.visible {
   background-color: rgba(13, 17, 23, 0.8);
   backdrop-filter: blur(10px);
@@ -125,6 +126,7 @@
   display: block;
   font-weight: 500;
 }
+
 .res-nav-mobile-link:hover {
   color: var(--text-h);
 }
@@ -142,9 +144,11 @@
   color: var(--text-h);
   text-decoration: none;
 }
+
 .res-nav-logo-text {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 26px;
+  letter-spacing: -0.04em;
 }
 
 .res-nav-btn {
@@ -160,6 +164,7 @@
   text-decoration: none;
   border: none;
 }
+
 .res-nav-btn:hover {
   transform: translateY(-2px);
 }
@@ -169,6 +174,7 @@
   color: var(--bg);
   box-shadow: var(--shadow);
 }
+
 .res-nav-btn-secondary {
   background-color: transparent;
   color: var(--text-h);
@@ -179,6 +185,7 @@
     display: none !important;
   }
 }
+
 @media (max-width: 1023px) {
   .res-nav-body {
     display: none !important;

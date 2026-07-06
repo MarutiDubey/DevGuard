@@ -153,9 +153,8 @@ const BorderGlow = ({
         end: 0, 
         onUpdate: v => card.style.setProperty('--edge-proximity', String(v)), 
         onEnd: () => {
-          card.classList.remove('sweep-active');
-          // Loop: restart after 2 seconds delay
-          setTimeout(runAnimation, 2000);
+          // Loop immediately for a continuous glow
+          runAnimation();
         }
       });
     };
