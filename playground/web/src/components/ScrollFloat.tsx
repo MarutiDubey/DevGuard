@@ -31,7 +31,7 @@ export default function ScrollFloat({
   const containerRef = useRef<HTMLHeadingElement>(null);
 
   const splitText = useMemo(() => {
-    const text = typeof children === "string" ? children : "";
+    const text = (typeof children === "string" ? children : "").trim();
     return text.split("").map((char, index) => (
       <span className="char" key={index}>
         {char === " " ? "\u00A0" : char}
