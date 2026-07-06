@@ -6,6 +6,8 @@ interface LiquidButtonProps {
   onClick?: () => void;
   color?: string;
   background?: string;
+  fillColor?: string;
+  hoverText?: string;
   className?: string;
 }
 
@@ -16,13 +18,17 @@ interface LiquidButtonProps {
 export function LiquidButton({
   children,
   onClick,
-  color = "#1e3a8a",
+  color = "#8ab4ff",
   background = "transparent",
+  fillColor = "#ffffff",
+  hoverText = "#0f172a",
   className = "",
 }: LiquidButtonProps) {
   const style = {
     "--liquid-color": color,
     "--liquid-bg": background,
+    "--liquid-fill-color": fillColor,
+    "--liquid-hover-text": hoverText,
   } as CSSProperties;
 
   return (

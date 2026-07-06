@@ -1,58 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
-  --text: #64748b;
-  --text-h: #0f172a;
-  --bg: #f8fafc;
-  --border: #e2e8f0;
-  --code-bg: #f1f5f9;
-  --accent: #1e3a8a;
-  --accent-light: #2563eb;
-  --accent-bg: rgba(30, 58, 138, 0.08);
-  --accent-border: rgba(30, 58, 138, 0.3);
+  --text: #94a3b8;
+  --text-h: #f1f5f9;
+  --bg: #0d1117;
+  --border: #1e2a3a;
+  --code-bg: #131c28;
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --accent-bg: rgba(59, 130, 246, 0.12);
+  --accent-border: rgba(59, 130, 246, 0.35);
   --shadow:
-    rgba(0, 0, 0, 0.08) 0 10px 15px -3px, rgba(0, 0, 0, 0.04) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.5) 0 10px 15px -3px, rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
 
-  --risk-low: #15803d;
-  --risk-low-bg: rgba(21, 128, 61, 0.1);
-  --risk-medium: #b45309;
-  --risk-medium-bg: rgba(180, 83, 9, 0.1);
-  --risk-high: #b91c1c;
-  --risk-high-bg: rgba(185, 28, 28, 0.1);
+  --risk-low: #4ade80;
+  --risk-low-bg: rgba(74, 222, 128, 0.12);
+  --risk-medium: #fbbf24;
+  --risk-medium-bg: rgba(251, 191, 36, 0.12);
+  --risk-high: #f87171;
+  --risk-high-bg: rgba(248, 113, 113, 0.12);
 
   --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 17px/145% var(--sans);
-  color-scheme: light dark;
+  color-scheme: dark;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #94a3b8;
-    --text-h: #f1f5f9;
-    --bg: #0d1117;
-    --border: #1e2a3a;
-    --code-bg: #131c28;
-    --accent: #3b82f6;
-    --accent-light: #60a5fa;
-    --accent-bg: rgba(59, 130, 246, 0.12);
-    --accent-border: rgba(59, 130, 246, 0.35);
-    --shadow:
-      rgba(0, 0, 0, 0.5) 0 10px 15px -3px, rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
-
-    --risk-low: #4ade80;
-    --risk-low-bg: rgba(74, 222, 128, 0.12);
-    --risk-medium: #fbbf24;
-    --risk-medium-bg: rgba(251, 191, 36, 0.12);
-    --risk-high: #f87171;
-    --risk-high-bg: rgba(248, 113, 113, 0.12);
-  }
 }
 
 * {
@@ -66,8 +44,11 @@ body {
 
 /* ── Custom Cursor (ported from Hackathone-Arena) ── */
 @media (pointer: fine) {
+
   /* Hide native cursor only on mouse devices */
-  * { cursor: none !important; }
+  * {
+    cursor: none !important;
+  }
 }
 
 .custom-cursor-ring {
@@ -179,11 +160,28 @@ h3 {
 
 /* ScrollFloat heading sizes */
 .how-heading,
-.try-heading {
-  font-size: clamp(2.4rem, 6vw, 4.5rem);
-  font-weight: 800;
+.try-heading,
+.setup-heading {
+  font-size: clamp(2.4rem, 6vw, 4.5rem) !important;
+  font-weight: 800 !important;
   color: var(--text-h);
   letter-spacing: -1px;
+  white-space: normal;
+  pointer-events: auto;
+}
+
+/* GlitchText pseudo-elements must match the page background exactly */
+.setup-heading::before,
+.setup-heading::after {
+  background-color: var(--bg) !important;
+}
+
+.setup-heading {
+  margin-bottom: 24px !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  line-height: 1.1 !important;
+  display: inline-block !important;
 }
 
 
@@ -216,6 +214,22 @@ a {
   max-width: 700px;
 }
 
+/* Hero heading — FuzzyText canvas wrapper */
+.hero-h1-fuzzy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 24px;
+  width: 100%;
+  gap: 0px;
+}
+
+.hero-h1-fuzzy canvas {
+  display: block;
+  max-width: 100%;
+}
+
 .hero {
   position: relative;
   width: 100%;
@@ -231,7 +245,8 @@ a {
 .hero-orb {
   position: absolute;
   inset: 0;
-  pointer-events: auto;   /* hover kaam karega */
+  pointer-events: auto;
+  /* hover kaam karega */
   opacity: 0.85;
   z-index: 0;
 }
@@ -240,7 +255,8 @@ a {
   position: relative;
   z-index: 1;
   width: 100%;
-  pointer-events: none;   /* let orb catch pointer, buttons still work */
+  pointer-events: none;
+  /* let orb catch pointer, buttons still work */
 }
 
 /* Restore pointer for interactive hero children */
@@ -268,7 +284,9 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-orb { display: none; }
+  .hero-orb {
+    display: none;
+  }
 }
 
 .hero .badge {
@@ -376,16 +394,30 @@ button.secondary {
 
 /* ── Loading dots ── */
 @keyframes blink {
-  0%, 80%, 100% { opacity: 0; }
-  40% { opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 1;
+  }
 }
 
 .loading-dots span {
   animation: blink 1.2s infinite;
   display: inline-block;
 }
-.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 /* ── Error / Result ── */
 .result {
@@ -397,9 +429,17 @@ button.secondary {
 }
 
 /* Colored top accent bar per risk level */
-.result--low    { border-top: 3px solid var(--risk-low); }
-.result--medium { border-top: 3px solid var(--risk-medium); }
-.result--high   { border-top: 3px solid var(--risk-high); }
+.result--low {
+  border-top: 3px solid var(--risk-low);
+}
+
+.result--medium {
+  border-top: 3px solid var(--risk-medium);
+}
+
+.result--high {
+  border-top: 3px solid var(--risk-high);
+}
 
 .result-header {
   padding: 20px 24px 0;
@@ -448,8 +488,15 @@ button.secondary {
   color: var(--text);
 }
 
-.stat-add { color: var(--risk-low); font-weight: 600; }
-.stat-del { color: var(--risk-high); font-weight: 600; }
+.stat-add {
+  color: var(--risk-low);
+  font-weight: 600;
+}
+
+.stat-del {
+  color: var(--risk-high);
+  font-weight: 600;
+}
 
 .summary {
   margin: 0 24px 20px;
@@ -494,11 +541,21 @@ button.secondary {
   transition: transform 0.1s;
 }
 
-.finding:hover { transform: translateX(2px); }
+.finding:hover {
+  transform: translateX(2px);
+}
 
-.finding--error  { border-left-color: var(--risk-high); }
-.finding--warning{ border-left-color: var(--risk-medium); }
-.finding--info   { border-left-color: var(--accent); }
+.finding--error {
+  border-left-color: var(--risk-high);
+}
+
+.finding--warning {
+  border-left-color: var(--risk-medium);
+}
+
+.finding--info {
+  border-left-color: var(--accent);
+}
 
 .finding-top {
   display: flex;
@@ -508,7 +565,10 @@ button.secondary {
   margin-bottom: 6px;
 }
 
-.finding-icon { font-size: 14px; flex-shrink: 0; }
+.finding-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
 
 .finding-title {
   font-weight: 600;
@@ -569,7 +629,9 @@ button.secondary {
   margin-top: 16px;
 }
 
-.clean-icon { font-size: 20px; }
+.clean-icon {
+  font-size: 20px;
+}
 
 
 
@@ -746,11 +808,14 @@ button.secondary {
 
 /* Shuffle heading for Features */
 .features-heading {
-  font-size: clamp(2.2rem, 5.5vw, 4rem);
-  font-weight: 800;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
   color: var(--text-h);
-  letter-spacing: -1px;
-  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: normal;
+  margin: 0 0 16px;
+  line-height: 1.4;
 }
 
 .features-grid {
@@ -786,6 +851,7 @@ button.secondary {
 
 /* ── Responsive ── */
 @media (max-width: 720px) {
+
   .how-grid,
   .features-grid {
     grid-template-columns: 1fr;
@@ -806,6 +872,7 @@ footer {
 .site-header .gooey-nav-container nav ul {
   gap: 0.5em;
 }
+
 .site-header .gooey-nav-container nav ul li a {
   font-size: 14px;
   font-weight: 500;
@@ -813,10 +880,27 @@ footer {
   color: var(--text-h);
   text-decoration: none;
 }
-.site-header .gooey-nav-container nav ul li.active a { color: #000; }
-.site-header .gooey-nav-container .effect.text { color: var(--text-h); }
-.site-header .gooey-nav-container .effect.text.active { color: #000; }
-.site-header .gooey-nav-container .effect.filter::before { background: transparent; }
+
+/* Hide the native li text when active — only the effect overlay should be visible */
+.site-header .gooey-nav-container nav ul li.active a {
+  color: transparent;
+}
+
+.site-header .gooey-nav-container nav ul li:hover {
+  box-shadow: 0 0 0 1.5px white !important;
+}
+
+.site-header .gooey-nav-container .effect.text {
+  color: var(--text-h);
+}
+
+.site-header .gooey-nav-container .effect.text.active {
+  color: var(--text-h);
+}
+
+.site-header .gooey-nav-container .effect.filter::before {
+  background: transparent;
+}
 
 /* ── TextType tagline ── */
 .tagline-type {
@@ -825,6 +909,7 @@ footer {
   margin: 6px 0 28px;
   display: block;
 }
+
 .tagline-cursor {
   color: var(--accent);
   font-weight: 400;
@@ -863,9 +948,18 @@ footer {
   display: inline-block;
   flex-shrink: 0;
 }
-.term-dot.red    { background: #ff5f57; }
-.term-dot.yellow { background: #febc2e; }
-.term-dot.green  { background: #28c840; }
+
+.term-dot.red {
+  background: #ff5f57;
+}
+
+.term-dot.yellow {
+  background: #febc2e;
+}
+
+.term-dot.green {
+  background: #28c840;
+}
 
 .terminal-filename {
   margin-left: 8px;
@@ -877,15 +971,19 @@ footer {
 
 .term-copy-btn {
   font-size: 12px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(146, 18, 18, 0.08);
   color: #ccc;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 6px;
   padding: 3px 10px;
   cursor: pointer;
   transition: background 0.15s;
 }
-.term-copy-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
+.term-copy-btn:hover {
+  background: rgba(253, 251, 251, 0.18);
+  color: #fff;
+}
 
 .terminal-body {
   display: flex;
@@ -899,14 +997,14 @@ footer {
   padding: 16px 0;
   min-width: 40px;
   text-align: right;
-  border-right: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(245, 239, 239, 0.06);
   user-select: none;
 }
 
 .line-number {
   font-size: 12px;
   line-height: 1.8;
-  color: rgba(255,255,255,0.2);
+  color: rgba(255, 255, 255, 0.2);
   padding: 0 10px;
   display: block;
 }
@@ -928,5 +1026,23 @@ footer {
 }
 
 /* ── how-step inside BorderGlow ── */
-.how-step { border: none; border-radius: 0; background: transparent; }
+.how-step {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Stronger hover highlight on the How-it-works cards */
+.how-grid .border-glow-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.how-grid .border-glow-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 18px 40px -12px rgba(245, 246, 248, 0.45),
+    0 0 0 1px var(--accent-border);
+}
 
