@@ -1,221 +1,204 @@
-﻿# 🛡️ GitOwl
+<div align="center">
 
-**AI-assisted code review for GitHub pull requests.**
+<img src="docs/owl.png" alt="GitOwl logo" width="120" height="120" />
 
-GitOwl combines a traditional static analyser (Semgrep) with an AI reasoning
-layer that contextualises findings, filters false positives, flags risky
-changes, and scores overall PR risk — so human reviewers focus on what matters.
+# GitOwl
 
-```
-PR opened → GitHub Action → Semgrep scans diff → AI filters + reasons
-          → risk score (Low/Medium/High) → structured PR comment
-```
+### AI-powered code review that lives inside your pull requests
 
-> **License:** MIT · Public, solo-maintained, open to contributions.
-> See [CONTRIBUTING.md](CONTRIBUTING.md) and [PROJECT_BRAIN.md](PROJECT_BRAIN.md).
+GitOwl reviews every pull request automatically — flagging bugs, security risks,
+and code smells, scoring overall risk, and posting a structured review comment
+before a human ever opens the diff.
 
----
+<p>
+  <a href="https://gitowl.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-gitowl.vercel.app-1e3a8a?style=for-the-badge" /></a>
+  <a href="https://pypi.org/project/gitowl/"><img alt="PyPI" src="https://img.shields.io/pypi/v/gitowl?style=for-the-badge&color=1e3a8a&label=PyPI" /></a>
+</p>
 
-## Add GitOwl to your repo (3 steps)
+<p>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-166_passing-2ea043" />
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue" />
+  <img alt="Type checked" src="https://img.shields.io/badge/mypy-strict-informational" />
+</p>
 
-Get automated AI review comments on every pull request:
+**[🔗 Try the live demo](https://gitowl.vercel.app)** &nbsp;·&nbsp;
+**[📦 Install from PyPI](https://pypi.org/project/gitowl/)** &nbsp;·&nbsp;
+**[⚡ Add to your repo](#-add-gitowl-to-your-repo-in-3-steps)**
 
-1. **Copy the workflow** — save [`examples/gitowl-review.yml`](examples/gitowl-review.yml)
-   into your repo at `.github/workflows/gitowl-review.yml`. It runs `pip install gitowl`.
-2. **Add your key** — in your repo, go to *Settings → Secrets and variables → Actions*
-   and add a secret `AI_API_KEY` (your OpenRouter or OpenAI key).
-3. **Open a PR** — GitOwl reviews the diff and posts a comment automatically.
-
-Defaults to OpenRouter + `openai/gpt-4o-mini`. Override with repo *variables*
-`AI_PROVIDER` / `AI_MODEL` / `AI_BASE_URL`. Want static analysis too? Use
-`pip install "gitowl[semgrep]"` in the workflow.
+</div>
 
 ---
 
-## Quick start (local)
+## What it does
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate            # Windows  (macOS/Linux: source .venv/bin/activate)
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
+Open a pull request and GitOwl does the first review pass for you:
 
-cp .env.example .env              # then edit .env with your provider + key
+```
+ PR opened  →  GitHub Action  →  static analysis + AI reasoning
+            →  risk score (Low / Medium / High)  →  structured review comment
 ```
 
-### Review a diff locally
+Instead of a human reviewer starting from a cold diff, the team gets an AI
+summary of what changed, a prioritised list of issues with reasoning, one-click
+fix suggestions, and an overall risk score — so review time goes to the changes
+that actually matter.
 
-```bash
-# From a saved diff
-python -m gitowl.cli review-diff my.diff
-
-# From git, piped in
-git diff main...HEAD | python -m gitowl.cli review-diff -
-
-# Skip static analysis (AI only)
-python -m gitowl.cli review-diff my.diff --no-semgrep
-```
-
-### Review a GitHub PR
-
-```bash
-# Print the review
-python -m gitowl.cli review-pr MarutiDubey/GitOwl 42
-
-# Post/update the review as a PR comment
-python -m gitowl.cli review-pr MarutiDubey/GitOwl 42 --post
-
-# ...and post committable fixes as inline suggestions (GitHub's one-click
-# "Commit suggestion" button). Only findings whose fix lands on a changed
-# line are posted; the rest stay in the summary comment.
-python -m gitowl.cli review-pr MarutiDubey/GitOwl 42 --post --suggest
-```
-
-### Describe a PR (auto-generated description)
-
-Generate a clear PR description (title + summary + change list) from a diff:
-
-```bash
-# From a diff (file or stdin) — prints the description
-python -m gitowl.cli describe-diff my.diff
-git diff main...HEAD | python -m gitowl.cli describe-diff -
-
-# From a GitHub PR — print it
-python -m gitowl.cli describe-pr MarutiDubey/GitOwl 42
-
-# ...or write it into the PR body (between GitOwl markers, preserving your text)
-python -m gitowl.cli describe-pr MarutiDubey/GitOwl 42 --post
-```
-
-`--post` only replaces GitOwl's own marked section, so any description you
-wrote by hand stays intact.
-
-### List AI providers
-
-```bash
-python -m gitowl.cli providers
-```
+> **Try it in your browser first:** paste any diff into the
+> **[live playground](https://gitowl.vercel.app)** and watch GitOwl review it in
+> real time — no install, no signup.
 
 ---
 
-## AI providers
+## Highlights
 
-GitOwl is provider-agnostic. Set `AI_PROVIDER` in `.env`:
-
-| `AI_PROVIDER` | Notes |
+| | Feature |
 |---|---|
-| `openrouter` | **Default.** One key, many models. Set `AI_API_KEY`. |
-| `openai` | Direct OpenAI API. Set `AI_API_KEY`. |
-| `ollama` | Local, free, offline. Run `ollama serve` first — no key needed. |
+| 🔎 | **AI code review** — contextual findings with reasoning, not just pattern matches. Filters false positives so the noise stays low. |
+| 🚦 | **Risk scoring** — every PR is scored Low / Medium / High from the files touched and the nature of the change. |
+| ✍️ | **One-click fix suggestions** — confident fixes are posted as GitHub inline suggestions you can commit in a single click. |
+| 📝 | **Auto PR descriptions** — generate a title, summary, and change list straight from the diff. |
+| 🛡️ | **Optional static analysis** — pairs an AI layer with Semgrep when you want both; auto-detected, never required. |
+| ⚙️ | **Team-wide config** — a committed `.gitowl.toml` sets severity thresholds and ignored paths for the whole repo. |
+| 💸 | **Cost & latency tracking** — every review reports token usage, estimated cost, and latency. No surprises on the bill. |
+| 🔌 | **Provider-agnostic** — works with any OpenAI-compatible provider. Bring whichever API key you already have. |
+| 📊 | **Evaluation harness** — precision / recall / F1 measured against a seeded-bug corpus, so quality is a number, not a vibe. |
 
-See [`gitowl/ai_client/README.md`](gitowl/ai_client/README.md) to add a provider.
+---
 
-> ⚠️ **Never commit your `.env` or API keys.** `.env` is git-ignored by default.
+## ⚡ Add GitOwl to your repo in 3 steps
+
+Get automated AI reviews on every pull request:
+
+**1. Add the workflow** — copy
+[`examples/gitowl-review.yml`](examples/gitowl-review.yml) into your repository at
+`.github/workflows/gitowl-review.yml`:
+
+```yaml
+- name: Install GitOwl
+  run: pip install gitowl
+
+- name: Review the pull request
+  env:
+    AI_API_KEY: ${{ secrets.AI_API_KEY }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  run: gitowl review-pr "${{ github.repository }}" "${{ github.event.pull_request.number }}" --post
+```
+
+**2. Add your API key** — in your repo, go to
+*Settings → Secrets and variables → Actions* and add a secret named `AI_API_KEY`.
+Use a key from **any OpenAI-compatible provider** you already have.
+
+**3. Open a pull request** — GitOwl reviews the diff and posts its comment
+automatically. That's it.
+
+> Want static analysis alongside the AI review? Install with
+> `pip install "gitowl[semgrep]"`.
+
+---
+
+## Tech stack
+
+| Layer | Tools |
+|---|---|
+| **Core engine** | Python 3.11+, `httpx`, `unidiff` |
+| **AI layer** | Provider-agnostic (any OpenAI-compatible API) |
+| **Static analysis** | Semgrep (optional, auto-detected) |
+| **Distribution** | PyPI package + GitHub Action, published via PyPI Trusted Publishing (OIDC) |
+| **Playground** | React + Vite + TypeScript frontend, Python serverless API — deployed on Vercel |
+| **Quality** | `pytest` (166 tests), `ruff`, `black`, `isort`, strict `mypy`, `pre-commit`, CI on every PR |
+
+---
+
+## Install & use locally
+
+```bash
+pip install gitowl          # or:  pip install "gitowl[semgrep]"
+```
+
+Point it at a diff or a live pull request:
+
+```bash
+# Review a diff — from a file, or piped from git
+gitowl review-diff my.diff
+git diff main...HEAD | gitowl review-diff -
+
+# Review a GitHub PR and post the comment
+gitowl review-pr owner/repo 42 --post
+
+# ...and attach one-click fix suggestions inline
+gitowl review-pr owner/repo 42 --post --suggest
+
+# Auto-generate a PR description from the diff
+gitowl describe-pr owner/repo 42 --post
+```
+
+Configure your provider once via environment variables (or a local `.env`):
+
+```bash
+AI_API_KEY=your_key_here          # any OpenAI-compatible provider
+AI_MODEL=your-model-name          # e.g. a fast, low-cost chat model
+AI_PROVIDER=openrouter            # openrouter | openai | ollama
+```
+
+> 🔒 API keys are read only from the environment / `.env` (which is git-ignored)
+> — never from committed config. They never touch the repository.
 
 ---
 
 ## Configuration (`.gitowl.toml`)
 
-Drop a `.gitowl.toml` file at your repo root to set project-wide review policy.
-It's committed to the repo, so the whole team shares the same rules.
+Drop a `.gitowl.toml` at your repo root to set project-wide review policy. It's
+committed, so the whole team shares the same rules:
 
 ```toml
 [review]
-# Hide findings below this level. One of: info | warning | error.
-# Default "info" reports everything.
-min_severity = "warning"
-
-# Glob patterns for files GitOwl should not report findings on.
-# Matches nested paths (e.g. "*.md" also matches "docs/x.md").
-ignore_paths = ["tests/**", "**/*.md", "vendor/**"]
+min_severity = "warning"                       # info | warning | error
+ignore_paths = ["tests/**", "**/*.md"]          # globs GitOwl won't flag
 
 [ai]
-# Optional: pin the model for this repo (env AI_MODEL still overrides).
-model = "openai/gpt-4o-mini"
-
-[pricing]
-# Optional: override or add model prices, as [input, output] USD per 1M tokens.
-# GitOwl ships prices for common models; add your own for anything else.
-"my-org/private-model" = [2.0, 8.0]
+model = "your-model-name"                       # pin a model for this repo
 ```
 
-**Precedence** (lowest to highest): built-in defaults → `.gitowl.toml` →
-environment variables. So the repo file sets the baseline, and a CI secret or a
-shell `export` can always override it for a single run. **API keys are never read
-from this file** — they stay in `.env` / environment only.
-
-Everything is optional; with no file present, GitOwl behaves exactly as before
-(reports every finding, ignores nothing).
-
-### Cost & latency
-
-Each review call's token usage, estimated cost, and latency are logged and shown
-in a small footer line on the PR comment, e.g.:
-
-> _Generated by GitOwl · openai/gpt-4o-mini · 1,560 tok · ~$0.0004 · 1,834ms_
-
-Cost is estimated from the built-in price table plus any `[pricing]` overrides;
-an unpriced model shows `cost unknown` rather than a wrong number.
-
-### Fix suggestions
-
-When the model is confident of a concrete fix, it includes drop-in replacement
-code, rendered under the finding as a `suggestion` block:
-
-> - 🔴 **Weak password hash** (`auth.py:12`, _ai_)
->   MD5 is broken; use SHA-256.
->   ````
->   ```suggestion
->   return hashlib.sha256(pw.encode()).hexdigest()
->   ```
->   ````
-
-The code is kept verbatim so you can copy it straight in. (Posting these as
-inline, one-click-committable review comments is a planned follow-up.)
+**Precedence** (low → high): built-in defaults → `.gitowl.toml` → environment
+variables. The repo file sets the baseline; a CI secret or shell `export` always
+wins for a single run. API keys are never read from this file.
 
 ---
 
-## GitHub Action
+## How it's built
 
-`.github/workflows/gitowl-review.yml` runs GitOwl on every PR
-(`opened` / `synchronize` / `reopened`) and posts a review comment.
+GitOwl ships as three coordinated pieces:
 
-Configure in your repo settings:
-- **Secret** `AI_API_KEY` — your provider key.
-- **Variables** (optional) `AI_PROVIDER`, `AI_MODEL`, `AI_BASE_URL` — default to OpenRouter + `gpt-4o-mini`.
+- **A Python package** (`gitowl`) — the review engine: diff parsing, an
+  optional Semgrep pass, a provider-agnostic AI layer, risk scoring, and the
+  comment renderer. Published to PyPI.
+- **A GitHub Action** — wires the engine into the `pull_request` lifecycle and
+  posts / updates the review comment (and, optionally, inline suggestions).
+- **A web playground** — a React + Vite front end over a Python serverless API,
+  so anyone can try a review from the browser. Deployed on Vercel at
+  **[gitowl.vercel.app](https://gitowl.vercel.app)**.
 
-`GITHUB_TOKEN` is provided automatically by Actions.
+Quality is enforced in CI on every pull request: 166 tests, linting, strict type
+checking, and an **evaluation harness** that scores review quality (precision /
+recall / F1) against a corpus of diffs with known seeded bugs — so changes to
+prompts or models can be measured, not guessed.
+
+```bash
+pytest --cov=gitowl      # tests
+ruff check gitowl tests  # lint
+mypy gitowl              # strict type checking
+python -m gitowl.eval    # measure review quality (offline, no key)
+```
 
 ---
 
-## Eval harness
+## License
 
-Measure GitOwl's review quality against a corpus of diffs with **known** seeded
-bugs — precision / recall / F1. Runs offline and deterministically by default.
+[MIT](LICENSE) — free to use, modify, and build on.
 
-```bash
-python -m gitowl.eval                  # mock provider (offline, no key)
-python -m gitowl.eval --live           # score the real provider from .env
-python -m gitowl.eval --json           # machine-readable output
-python -m gitowl.eval --fail-under 0.9 # exit non-zero if aggregate F1 < 0.9
-```
+<div align="center">
 
-The corpus ships **12 cases** (weak hash, `eval`, hardcoded secret, SQL injection
-incl. f-string, unsafe `pickle`, a multi-bug diff, plus benign/clean cases and a
-few categories the offline mock intentionally can't catch). The mock baseline is
-**precision 1.00 / recall 0.73 / F1 0.84** — deliberately below 1.0 so the
-scoring math is genuinely exercised (a real provider via `--live` should do
-better). Cases live in [`gitowl/eval/cases/`](gitowl/eval/cases/) as
-`<name>.diff` + `<name>.expected.json` pairs — add your own to grow the corpus.
+**[🔗 Live demo](https://gitowl.vercel.app)** &nbsp;·&nbsp; **[📦 PyPI](https://pypi.org/project/gitowl/)** &nbsp;·&nbsp; Built by **[Manthan Dubey](https://github.com/MarutiDubey)**
 
-## Development
-
-```bash
-pytest --cov=gitowl          # tests
-ruff check gitowl tests      # lint
-black . && isort .             # format
-mypy gitowl                  # types
-pre-commit run --all-files     # all hooks
-```
-
-Roadmap and phases live in [CONTRIBUTING.md §1](CONTRIBUTING.md#1-development-roadmap).
+</div>

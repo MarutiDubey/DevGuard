@@ -1,6 +1,3 @@
-// Minimal floating cursor — dependency-free. Ported from react bit. txt
-// Usage: const api = initFloatingCursor(); ... api.destroy();
-
 type CursorOptions = {
   size?: number;
   color?: string;

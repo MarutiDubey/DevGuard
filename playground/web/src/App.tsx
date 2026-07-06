@@ -41,10 +41,10 @@ const NAV_ITEMS = [
 
 import { IconBrandGithub } from "@tabler/icons-react";
 
-// WebGL orb — lazy so it never blocks first paint.
+// WebGL orb ko lazy load kiya he taaki first paint delay na ho
 const Orb = lazy(() => import("./components/Orb"));
 
-// Stagger children in on load.
+// Load hone par children ko stagger animation diya hai
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
@@ -63,9 +63,9 @@ function App() {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    // Refresh ScrollTrigger after layout stabilizes to catch anchor jumps
+    // Layout stabilize hone ke baad ScrollTrigger refresh kar rahe hai taaki anchor jumps sahi se kaam karein
     const timeoutId = setTimeout(() => ScrollTrigger.refresh(), 200);
-    // Also listen to hash changes for navbar clicks
+    // Navbar clicks par hash change hone par bhi refresh chalega
     const handleHash = () => setTimeout(() => ScrollTrigger.refresh(), 100);
     window.addEventListener("hashchange", handleHash);
     
@@ -282,7 +282,7 @@ function App() {
   );
 }
 
-// Fade + rise a section into view once.
+// Section ko fade aur rise karke ek baar view me lana hai
 function Reveal({ children }: { children: React.ReactNode }) {
   return (
     <motion.div

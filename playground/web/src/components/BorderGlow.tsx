@@ -154,13 +154,13 @@ const BorderGlow = ({
         end: 0, 
         onUpdate: v => card.style.setProperty('--edge-proximity', String(v)), 
         onEnd: () => {
-          // Loop immediately for a continuous glow
+          // Continuous glow ke liye loop ko turant chala rahe hain
           runAnimation();
         }
       });
     };
     
-    // Start the animation loop
+    // Animation loop start
     runAnimation();
   }, [animated]);
 

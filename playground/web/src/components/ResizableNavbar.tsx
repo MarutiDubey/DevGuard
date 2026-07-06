@@ -87,7 +87,7 @@ export const NavBody = ({ children, className = "", visible }: NavBodyProps) => 
 };
 
 export const NavItems = ({ items, className = "" }: NavItemsProps) => {
-  // Convert items format from {name, link} to {label, href} for GooeyNav
+  // Items ke format ko {name, link} se {label, href} me convert kar diya GooeyNav ke liye
   const gooeyItems = items.map(item => ({ label: item.name, href: item.link }));
 
   return (

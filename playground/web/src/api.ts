@@ -109,5 +109,5 @@ index 7777777..8888888 100644
   },
 ];
 
-// Back-compat: the first example's diff.
+// Purane examples ke liye fallback diff rakha hai
 export const EXAMPLE_DIFF = EXAMPLES[0].diff;

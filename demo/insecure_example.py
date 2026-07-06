@@ -3,12 +3,12 @@ import subprocess
 
 
 def hash_password(password):
-    # Weak hashing algorithm
+    # MD5 hash weak hai isliye GitOwl isko flag karega
     return hashlib.md5(password.encode()).hexdigest()
 
 
 def run_command(user_input):
-    # Command injection risk
+    # shell=True ki wajah se yaha pe command injection risk hai
     subprocess.run(user_input, shell=True)
 
 

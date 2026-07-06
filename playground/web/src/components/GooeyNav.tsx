@@ -127,7 +127,7 @@ const GooeyNav = ({
     return () => resizeObserver.disconnect();
   }, [activeIndex]);
 
-  // ScrollSpy: observe sections and update activeIndex
+  // ScrollSpy se sections ko observe kar rahe hain aur active tab update kar rahe hain
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

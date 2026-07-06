@@ -75,7 +75,7 @@ export function HowItWorks() {
       observers.push(obs);
     });
 
-    // Animate the connector line fill
+    // Connector line ke fill hone ka animation
     if (fillRef.current) {
       const lineObs = new IntersectionObserver(
         ([entry]) => {

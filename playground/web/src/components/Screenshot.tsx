@@ -3,8 +3,7 @@ import { useState } from "react";
 export function Screenshot() {
   const [failed, setFailed] = useState(false);
 
-  // Hide the whole section if the screenshot asset isn't present, so the
-  // page never shows a broken-image icon.
+  // Agar screenshot load nahi hua toh poora section hide kar diya hai taaki broken image na dikhe
   if (failed) return null;
 
   return (

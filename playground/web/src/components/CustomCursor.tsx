@@ -5,7 +5,7 @@ export function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  // Ring cursor: slightly lagging spring
+  // Ring cursor me thoda lag spring effect diya hai
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -13,7 +13,7 @@ export function CustomCursor() {
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
-  // Dot: snappier spring
+  // Dot ke liye snappy spring rakhi hai
   const dotSpringConfig = { damping: 25, stiffness: 600, mass: 0.1 };
   const dotXSpring = useSpring(cursorX, dotSpringConfig);
   const dotYSpring = useSpring(cursorY, dotSpringConfig);
