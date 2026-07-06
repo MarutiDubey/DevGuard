@@ -1031,8 +1031,9 @@ footer {
 
 /* ── TextType tagline ── */
 .tagline-type {
-  font-size: 16px;
-  color: var(--text);
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: 600;
   margin: 6px 0 28px;
   display: block;
 }
