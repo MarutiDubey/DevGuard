@@ -15,6 +15,14 @@
 
   <br/>
 
+  ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+  ![Semgrep](https://img.shields.io/badge/Semgrep-SAST-blue?style=flat-square&logo=semgrep&logoColor=white)
+  ![OpenAI](https://img.shields.io/badge/OpenAI_Compatible-412991?style=flat-square&logo=openai&logoColor=white)
+  ![Pytest](https://img.shields.io/badge/Pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
+  ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
+
+  <br/>
+
   > Instead of a human reviewer starting from a cold diff, the team gets an AI summary of what changed, a prioritized list of issues with reasoning, one-click fix suggestions, and an overall risk score — so review time goes to the changes that actually matter.
 
   <br/>
@@ -25,46 +33,65 @@
 
 ---
 
+## 🎯 Demo
+
+> 🚧 **Live demo** - [gitowl.vercel.app](https://gitowl.vercel.app)
+
+*(Pro-tip: If you have a screenshot or GIF of GitOwl's inline PR comment, you can place it here in `docs/demo.png`!)*
+
+---
+
 ## 📑 Table of Contents
-- [✨ Overview](#-overview)
-- [🚀 Key Features](#-key-features)
+- [✨ Features](#-features)
+- [🏗️ Architecture](#️-architecture)
 - [⚡ Add GitOwl to your repo](#-add-gitowl-to-your-repo-in-3-steps)
 - [🛠️ Tech Stack](#️-tech-stack)
 - [📦 Install & use locally](#-install--use-locally)
 - [⚙️ Configuration](#️-configuration-gitowltoml)
-- [🏗️ How it's built](#️-how-its-built)
 - [📄 License](#-license)
 
 ---
 
-## ✨ Overview
+## ✨ Features
 
-Open a pull request and GitOwl does the first review pass for you:
-
-```
- PR opened  →  GitHub Action  →  static analysis + AI reasoning
-            →  risk score (Low / Medium / High)  →  structured review comment
-```
-
-> **Try it in your browser first:** paste any diff into the
-> **[live playground](https://gitowl.vercel.app)** and watch GitOwl review it in
-> real time — no install, no signup.
+- 🔎 **AI Code Review** — Contextual findings with reasoning, not just pattern matches. Filters false positives so the noise stays low.
+- 🚦 **Risk Scoring** — Every PR is scored Low / Medium / High from the files touched and the nature of the change.
+- 🛡️ **Optional Static Analysis** — Pairs an AI layer with Semgrep when you want both; auto-detected, never required.
+- ✍️ **One-Click Fix Suggestions** — Confident fixes are posted as GitHub inline suggestions you can commit in a single click.
+- 📝 **Auto PR Descriptions** — Generate a title, summary, and change list straight from the diff.
+- 🧠 **Structured Security Insights** — Identifies security issues and provides actionable context, mimicking rigorous security checks.
+- ⚙️ **Team-Wide Config** — A committed `.gitowl.toml` sets severity thresholds and ignored paths for the whole repo.
+- 💸 **Cost & Latency Tracking** — Every review reports token usage, estimated cost, and latency. No surprises on the bill.
+- 🔌 **Provider-Agnostic** — Works with any OpenAI-compatible provider (Ollama, OpenAI, OpenRouter, etc).
+- 📊 **Evaluation Harness** — Precision / recall / F1 measured against a seeded-bug corpus, so quality is a number, not a vibe.
 
 ---
 
-## 🚀 Key Features
+## 🏗️ Architecture
 
-| | Feature |
-|---|---|
-| 🔎 | **AI Code Review** — Contextual findings with reasoning, not just pattern matches. Filters false positives so the noise stays low. |
-| 🚦 | **Risk Scoring** — Every PR is scored Low / Medium / High from the files touched and the nature of the change. |
-| ✍️ | **One-Click Fix Suggestions** — Confident fixes are posted as GitHub inline suggestions you can commit in a single click. |
-| 📝 | **Auto PR Descriptions** — Generate a title, summary, and change list straight from the diff. |
-| 🛡️ | **Optional Static Analysis** — Pairs an AI layer with Semgrep when you want both; auto-detected, never required. |
-| ⚙️ | **Team-Wide Config** — A committed `.gitowl.toml` sets severity thresholds and ignored paths for the whole repo. |
-| 💸 | **Cost & Latency Tracking** — Every review reports token usage, estimated cost, and latency. No surprises on the bill. |
-| 🔌 | **Provider-Agnostic** — Works with any OpenAI-compatible provider. Bring whichever API key you already have. |
-| 📊 | **Evaluation Harness** — Precision / recall / F1 measured against a seeded-bug corpus, so quality is a number, not a vibe. |
+GitOwl runs efficiently inside your pull requests, acting as an automated first-pass reviewer before a human ever steps in.
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant GH as GitHub Actions
+    participant SAST as Semgrep
+    participant Engine as GitOwl Engine
+    participant AI as AI Model (OpenAI/Ollama)
+    
+    Dev->>GH: Opens Pull Request
+    GH->>Engine: Triggers gitowl-review.yml
+    Engine->>GH: Fetch PR Diff
+    par Static Analysis
+        Engine->>SAST: Scan code for known bug patterns
+    and AI Analysis
+        Engine->>AI: Send diff context & request structured review
+    end
+    Engine->>Engine: Reconcile AI findings & SAST findings
+    Engine->>Engine: Calculate Risk Score (Low/Medium/High)
+    Engine->>GH: Post Risk Score & Summary Comment
+    Engine->>GH: Post Inline One-Click Fix Suggestions
+```
 
 ---
 
@@ -72,9 +99,8 @@ Open a pull request and GitOwl does the first review pass for you:
 
 Get automated AI reviews on every pull request:
 
-**1. Add the workflow** — copy
-[`examples/gitowl-review.yml`](examples/gitowl-review.yml) into your repository at
-`.github/workflows/gitowl-review.yml`:
+### Step 1 — Add the workflow
+Copy [`examples/gitowl-review.yml`](examples/gitowl-review.yml) into your repository at `.github/workflows/gitowl-review.yml`:
 
 ```yaml
 - name: Install GitOwl
@@ -87,16 +113,15 @@ Get automated AI reviews on every pull request:
   run: gitowl review-pr "${{ github.repository }}" "${{ github.event.pull_request.number }}" --post
 ```
 
-**2. Add your API key** — in your repo, go to
-*Settings → Secrets and variables → Actions* and add a secret named `AI_API_KEY`.
-Use a key from **any OpenAI-compatible provider** you already have.
+### Step 2 — Add your API key
+In your repo, go to **Settings → Secrets and variables → Actions** and add a repository secret named `AI_API_KEY`.
+*(You can use a key from **any OpenAI-compatible provider** you already have.)*
 
-**3. Open a pull request** — GitOwl reviews the diff and posts its comment
-automatically. That's it.
+### Step 3 — Open a pull request
+GitOwl reviews the diff and posts its comment automatically. That's it!
 
 > [!NOTE]
-> Want static analysis alongside the AI review? Install with
-> `pip install "gitowl[semgrep]"`.
+> Want static analysis alongside the AI review? Install with `pip install "gitowl[semgrep]"`.
 
 ---
 
@@ -105,11 +130,11 @@ automatically. That's it.
 | Layer | Tools |
 |---|---|
 | **Core engine** | Python 3.11+, `httpx`, `unidiff` |
-| **AI layer** | Provider-agnostic (any OpenAI-compatible API) |
+| **AI layer** | Provider-agnostic (any OpenAI-compatible API, local Ollama) |
 | **Static analysis** | Semgrep (optional, auto-detected) |
-| **Distribution** | PyPI package + GitHub Action, published via PyPI Trusted Publishing (OIDC) |
-| **Playground** | React + Vite + TypeScript frontend, Python serverless API — deployed on Vercel |
-| **Quality** | `pytest` (166 tests), `ruff`, `black`, `isort`, strict `mypy`, `pre-commit`, CI on every PR |
+| **Distribution** | PyPI package + GitHub Action |
+| **Playground** | React + Vite + TypeScript frontend, Python serverless API (Vercel) |
+| **Quality** | `pytest` (166 tests), `ruff`, strict `mypy`, precision/recall Eval Harness |
 
 ---
 
@@ -145,15 +170,13 @@ AI_PROVIDER=openrouter            # openrouter | openai | ollama
 ```
 
 > [!IMPORTANT]
-> **API Security**
-> API keys are read only from the environment / `.env` (which is git-ignored) — never from committed config. They never touch the repository.
+> **API Security:** API keys are read only from the environment / `.env` (which is git-ignored). They never touch the repository config.
 
 ---
 
 ## ⚙️ Configuration (`.gitowl.toml`)
 
-Drop a `.gitowl.toml` at your repo root to set project-wide review policy. It's
-committed, so the whole team shares the same rules:
+Drop a `.gitowl.toml` at your repo root to set project-wide review policy. It's committed, so the whole team shares the same rules:
 
 ```toml
 [review]
@@ -164,41 +187,11 @@ ignore_paths = ["tests/**", "**/*.md"]         # globs GitOwl won't flag
 model = "your-model-name"                      # pin a model for this repo
 ```
 
-**Precedence** (low → high): built-in defaults → `.gitowl.toml` → environment
-variables. The repo file sets the baseline; a CI secret or shell `export` always
-wins for a single run. API keys are never read from this file.
-
----
-
-## 🏗️ How it's built
-
-GitOwl ships as three coordinated pieces:
-
-- **A Python package** (`gitowl`) — the review engine: diff parsing, an
-  optional Semgrep pass, a provider-agnostic AI layer, risk scoring, and the
-  comment renderer. Published to PyPI.
-- **A GitHub Action** — wires the engine into the `pull_request` lifecycle and
-  posts / updates the review comment (and, optionally, inline suggestions).
-- **A web playground** — a React + Vite front end over a Python serverless API,
-  so anyone can try a review from the browser. Deployed on Vercel at
-  **[gitowl.vercel.app](https://gitowl.vercel.app)**.
-
-Quality is enforced in CI on every pull request: 166 tests, linting, strict type
-checking, and an **evaluation harness** that scores review quality (precision /
-recall / F1) against a corpus of diffs with known seeded bugs — so changes to
-prompts or models can be measured, not guessed.
-
-```bash
-pytest --cov=gitowl      # tests
-ruff check gitowl tests  # lint
-mypy gitowl              # strict type checking
-python -m gitowl.eval    # measure review quality (offline, no key)
-```
+**Precedence** (low → high): built-in defaults → `.gitowl.toml` → environment variables. The repo file sets the baseline; a CI secret or shell `export` always wins for a single run. API keys are never read from this file.
 
 ---
 
 ## 📄 License
-
 This project is licensed under the **[MIT License](LICENSE)** — free to use, modify, and build on.
 
 ---

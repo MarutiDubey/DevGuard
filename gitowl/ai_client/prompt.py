@@ -1,4 +1,4 @@
-﻿"""Prompt construction and response parsing shared by AI providers.
+"""Prompt construction and response parsing shared by AI providers.
 
 The model is asked to return strict JSON so we can parse it deterministically.
 """
@@ -11,11 +11,12 @@ from gitowl.models import Finding, FindingSource, PrDescription, ReviewResult, R
 
 SYSTEM_PROMPT = (
     "You are GitOwl, an expert code reviewer. You are given a unified diff "
-    "from a GitHub pull request and, optionally, findings from the Semgrep "
+    "from a GitHub pull request (wrapped in <diff> tags) and, optionally, findings from the Semgrep "
     "static analyser. Your job:\n"
     "  1. Filter out Semgrep findings that are false positives given the diff context.\n"
     "  2. Add your own reasoning-based observations (bugs, security issues, "
-    "risky changes) that a static analyser would miss.\n"
+    "risky changes) that a static analyser would miss. If the finding is a security "
+    "vulnerability, explicitly cite the relevant OWASP Top 10 category in the message.\n"
     "  3. Assign an overall risk score: Low, Medium, or High.\n\n"
     "Respond with STRICT JSON only — no markdown, no prose outside the JSON. "
     "Use exactly this schema:\n"
@@ -38,7 +39,7 @@ SYSTEM_PROMPT = (
 
 def build_user_prompt(diff: str, findings: list[Finding]) -> str:
     """Assemble the user message containing the diff and Semgrep findings."""
-    parts = ["## Unified diff\n", "```diff", diff.strip(), "```", ""]
+    parts = ["## Unified diff\n", "<diff>", diff.strip(), "</diff>", ""]
     if findings:
         parts.append("## Semgrep findings (verify these; some may be false positives)")
         for f in findings:
@@ -141,7 +142,8 @@ def parse_review_response(content: str, semgrep_findings: list[Finding]) -> Revi
 
 
 DESCRIBE_SYSTEM_PROMPT = (
-    "You are GitOwl. You are given a unified diff from a GitHub pull request. "
+    "You are GitOwl. You are given a unified diff from a GitHub pull request "
+    "(wrapped in <diff> tags). "
     "Write a clear, concise pull-request description a reviewer can read at a "
     "glance. Describe what the change does and why — do NOT review it or flag "
     "issues.\n\n"
@@ -162,9 +164,9 @@ def build_describe_prompt(diff: str) -> str:
     return "\n".join(
         [
             "## Unified diff\n",
-            "```diff",
+            "<diff>",
             diff.strip(),
-            "```",
+            "</diff>",
             "",
             "Return the JSON description now.",
         ]
