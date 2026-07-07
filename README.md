@@ -37,7 +37,9 @@
 
 **Live demo dashboard:** [gitowl.vercel.app](https://gitowl.vercel.app)
 
+
 *(Screenshot of GitOwl in action coming soon)*
+
 
 ---
 
@@ -138,9 +140,11 @@ gitowl describe-pr owner/repo 42 --post
 
 **Environment Variables needed:**
 ```bash
-AI_API_KEY=your_key_here
-AI_MODEL=your-model-name
-AI_PROVIDER=openrouter
+
+AI_API_KEY=your_key_here          # any OpenAI-compatible provider
+AI_MODEL=your-model-name          # e.g. a fast, low-cost chat model
+AI_PROVIDER=your provider            # ex gemini| openai | ollama
+
 ```
 *I recommend storing these in a `.env` file.*
 
