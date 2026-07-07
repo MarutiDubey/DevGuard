@@ -84,11 +84,20 @@ def cmd_review_diff(args: argparse.Namespace, config: Config) -> int:
 
 
 def cmd_review_pr(args: argparse.Namespace, config: Config) -> int:
+    from gitowl.dashboard import PolicyDisabled, fetch_policy_override
     from gitowl.github_client import GitHubClient, GitHubError
 
     if not config.github_token:
         raise ConfigError("GITHUB_TOKEN is required for review-pr.")
-    client = GitHubClient(config.github_token)
+    github_token = config.github_token
+
+    try:
+        config = fetch_policy_override(args.repo, config)
+    except PolicyDisabled as exc:
+        logger.info("%s", exc)
+        return 0
+
+    client = GitHubClient(github_token)
 
     # Fetch PR head SHA for Check Run (best-effort — don't fail if it errors).
     pr_sha: str | None = None
@@ -116,6 +125,10 @@ def cmd_review_pr(args: argparse.Namespace, config: Config) -> int:
             if args.post:
                 _post_error(client, args, pr_sha, str(exc))
             return 3
+
+    from gitowl.dashboard import send_usage_metrics
+
+    send_usage_metrics(args.repo, args.pr, review.result)
 
     body = render_comment(review.result, review.stats)
     if args.post:

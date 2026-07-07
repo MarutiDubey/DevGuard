@@ -1,0 +1,47 @@
+﻿diff --git a/docs/owl_round.png b/docs/owl_round.png
+index 6ecde6b..312b835 100644
+Binary files a/docs/owl_round.png and b/docs/owl_round.png differ
+diff --git a/gitowl/cli.py b/gitowl/cli.py
+index 1e336ff..bbe1465 100644
+--- a/gitowl/cli.py
++++ b/gitowl/cli.py
+@@ -117,6 +117,10 @@ def cmd_review_pr(args: argparse.Namespace, config: Config) -> int:
+                 _post_error(client, args, pr_sha, str(exc))
+             return 3
+ 
++    from gitowl.dashboard import send_usage_metrics
++
++    send_usage_metrics(args.repo, args.pr, review.result)
++
+     body = render_comment(review.result, review.stats)
+     if args.post:
+         try:
+diff --git a/gitowl/comment.py b/gitowl/comment.py
+index 4b0c5b3..fe5d498 100644
+--- a/gitowl/comment.py
++++ b/gitowl/comment.py
+@@ -42,21 +42,21 @@ _HEADER = "\n".join(
+ def _finding_line(f: Finding) -> str:
+     icon = _SEVERITY_ICON.get(f.severity, "ΓÇó")
+     loc = f.location()
+-    
++
+     lines = [
+         f"> {icon} **{f.title}**  `{loc}`",
+         "> ",
+     ]
+     for msg_line in f.message.splitlines():
+         lines.append(f"> {msg_line}" if msg_line else ">")
+-        
++
+     if f.suggestion:
+         lines.append("> ")
+         lines.append("> ```suggestion")
+         for sl in f.suggestion.splitlines():
+             lines.append(f"> {sl}" if sl else ">")
+         lines.append("> ```")
+-    
++
+     return "\n".join(lines) + "\n"
+ 
+ 
