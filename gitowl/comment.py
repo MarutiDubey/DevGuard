@@ -6,9 +6,9 @@ from gitowl.diff_utils import DiffStats
 from gitowl.models import Finding, ReviewResult, RiskLevel, Severity
 
 _RISK_BADGE = {
-    RiskLevel.LOW: "🟢 **Low**",
-    RiskLevel.MEDIUM: "🟡 **Medium**",
-    RiskLevel.HIGH: "🔴 **High**",
+    RiskLevel.LOW: "🟢 **Low Risk**",
+    RiskLevel.MEDIUM: "⚠️ **Medium Risk**",
+    RiskLevel.HIGH: "🚨 **High Risk**",
 }
 
 _SEVERITY_ICON = {
@@ -42,13 +42,22 @@ _HEADER = "\n".join(
 def _finding_line(f: Finding) -> str:
     icon = _SEVERITY_ICON.get(f.severity, "•")
     loc = f.location()
-    src = f.rule_id or f.source.value
-    line = f"- {icon} **{f.title}** (`{loc}`, _{src}_)\n  {f.message}"
+
+    lines = [
+        f"> {icon} **{f.title}**  `{loc}`",
+        "> ",
+    ]
+    for msg_line in f.message.splitlines():
+        lines.append(f"> {msg_line}" if msg_line else ">")
+
     if f.suggestion:
-        # Flush-left, verbatim code so the block stays copy-pasteable now and
-        # commit-ready when we post these as inline review comments later.
-        line += f"\n\n```suggestion\n{f.suggestion}\n```"
-    return line
+        lines.append("> ")
+        lines.append("> ```suggestion")
+        for sl in f.suggestion.splitlines():
+            lines.append(f"> {sl}" if sl else ">")
+        lines.append("> ```")
+
+    return "\n".join(lines) + "\n"
 
 
 def render_error_comment(error_msg: str) -> str:
@@ -80,22 +89,21 @@ def render_comment(result: ReviewResult, stats: DiffStats) -> str:
     lines: list[str] = [
         COMMENT_MARKER,
         _HEADER,
-        f"**Risk:** {_RISK_BADGE.get(result.risk, result.risk.value)}  ·  "
-        f"**Files changed:** {stats.files_changed}  ·  "
-        f"**Lines:** +{stats.added_lines}/-{stats.removed_lines}",
-        "",
-        result.summary,
-        "",
+        f"> {_RISK_BADGE.get(result.risk, result.risk.value)}  ·  "
+        f"**{stats.files_changed} file" + ("s" if stats.files_changed != 1 else "") + "**  ·  "
+        f"+{stats.added_lines}/-{stats.removed_lines}",
+        ">",
     ]
+    for sl in result.summary.splitlines():
+        lines.append(f"> {sl}" if sl else ">")
+    lines.append("")
 
     if result.findings:
-        lines.append(f"### Findings ({len(result.findings)})")
+        lines.append(f"### FINDINGS ({len(result.findings)})\n")
         lines.extend(_finding_line(f) for f in result.findings)
-        lines.append("")
     else:
-        lines.append("### Findings")
-        lines.append("_No issues flagged. ✅_")
-        lines.append("")
+        lines.append("### FINDINGS\n")
+        lines.append("_No issues flagged. ✅_\n")
 
     if result.dismissed:
         lines.append(
