@@ -42,21 +42,21 @@ _HEADER = "\n".join(
 def _finding_line(f: Finding) -> str:
     icon = _SEVERITY_ICON.get(f.severity, "•")
     loc = f.location()
-    
+
     lines = [
         f"> {icon} **{f.title}**  `{loc}`",
         "> ",
     ]
     for msg_line in f.message.splitlines():
         lines.append(f"> {msg_line}" if msg_line else ">")
-        
+
     if f.suggestion:
         lines.append("> ")
         lines.append("> ```suggestion")
         for sl in f.suggestion.splitlines():
             lines.append(f"> {sl}" if sl else ">")
         lines.append("> ```")
-    
+
     return "\n".join(lines) + "\n"
 
 
