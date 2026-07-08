@@ -31,7 +31,7 @@ export async function PATCH(
 
     // Parse the body
     const body = await request.json();
-    const { minSeverity, aiModel, ignorePaths } = body;
+    const { minSeverity, aiModel, ignorePaths, isEnabled } = body;
 
     // ignorePaths arrives as a newline-separated string from the textarea
     const normalizedIgnorePaths =
@@ -47,7 +47,8 @@ export async function PATCH(
       data: {
         minSeverity,
         aiModel,
-        ignorePaths: normalizedIgnorePaths
+        ignorePaths: normalizedIgnorePaths,
+        ...(typeof isEnabled === "boolean" && { isEnabled })
       }
     });
 

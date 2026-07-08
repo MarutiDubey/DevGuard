@@ -11,12 +11,14 @@ type Repository = {
   minSeverity: string;
   aiModel: string;
   ignorePaths: string | null;
+  isEnabled: boolean;
 };
 
 export default function PolicyClient({ repo }: { repo: Repository }) {
   const [minSeverity, setMinSeverity] = useState(repo.minSeverity);
   const [aiModel, setAiModel] = useState(repo.aiModel);
   const [ignorePaths, setIgnorePaths] = useState(repo.ignorePaths || "");
+  const [isEnabled, setIsEnabled] = useState(repo.isEnabled);
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
@@ -25,7 +27,7 @@ export default function PolicyClient({ repo }: { repo: Repository }) {
       const res = await fetch(`/api/repos/${repo.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ minSeverity, aiModel, ignorePaths }),
+        body: JSON.stringify({ minSeverity, aiModel, ignorePaths, isEnabled }),
       });
       if (!res.ok) throw new Error("Failed to save");
       alert("Policy saved successfully!");
@@ -58,7 +60,22 @@ export default function PolicyClient({ repo }: { repo: Repository }) {
         <div className="rounded-2xl border border-white/[0.05] bg-black/40 backdrop-blur-md p-8 space-y-8 relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-32 h-32 bg-[#F5A623]/5 rounded-full blur-[60px]" />
           
-          <div>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-1 font-heading flex items-center gap-2">
+                GitOwl Engine
+              </h3>
+              <p className="text-sm text-slate-400">Enable or disable automated PR reviews for this repository.</p>
+            </div>
+            <button
+              onClick={() => setIsEnabled(!isEnabled)}
+              className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#00E5FF]/50 focus:ring-offset-2 focus:ring-offset-black ${isEnabled ? 'bg-[#00E5FF]' : 'bg-white/10'}`}
+            >
+              <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${isEnabled ? 'translate-x-8' : 'translate-x-1'}`} />
+            </button>
+          </div>
+
+          <div className="border-t border-white/[0.05] pt-8">
             <h3 className="text-lg font-semibold text-white mb-2 font-heading flex items-center gap-2">
               <TerminalSquare className="w-4 h-4 text-[#F5A623]" />
               Minimum Severity Threshold
