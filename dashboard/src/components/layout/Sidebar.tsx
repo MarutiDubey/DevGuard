@@ -25,7 +25,7 @@ export default function Sidebar() {
       <div className="p-8 pb-4 relative z-10">
         <div className="flex items-center gap-3 mb-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/gitowl-logo.png" alt="GitOwl Logo" className="w-10 h-10 drop-shadow-[0_0_8px_rgba(245,166,35,0.5)]" />
+          <img src="/gitowl-logo.svg" alt="GitOwl Logo" className="w-10 h-10 drop-shadow-[0_0_8px_rgba(245,166,35,0.5)]" />
           <div>
             <h1 className="text-2xl font-bold tracking-tighter text-white font-heading flex items-center gap-2">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">GitOwl</span>
