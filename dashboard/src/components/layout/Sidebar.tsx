@@ -23,11 +23,17 @@ export default function Sidebar() {
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-white/[0.05] to-transparent pointer-events-none" />
 
       <div className="p-8 pb-4 relative z-10">
-        <h1 className="text-2xl font-bold tracking-tighter text-white flex items-center gap-2 font-heading">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">GitOwl</span>
-          <span className="w-2 h-2 rounded-full bg-[#F5A623] glow-accent animate-pulse" />
-        </h1>
-        <p className="text-[11px] uppercase tracking-widest text-slate-500 mt-2 font-medium">Precision Engine</p>
+        <div className="flex items-center gap-3 mb-1">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/gitowl-logo.png" alt="GitOwl Logo" className="w-10 h-10 drop-shadow-[0_0_8px_rgba(245,166,35,0.5)]" />
+          <div>
+            <h1 className="text-2xl font-bold tracking-tighter text-white font-heading flex items-center gap-2">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">GitOwl</span>
+              <span className="w-2 h-2 rounded-full bg-[#F5A623] glow-accent animate-pulse" />
+            </h1>
+            <p className="text-[11px] uppercase tracking-widest text-slate-500 font-medium">Precision Engine</p>
+          </div>
+        </div>
       </div>
 
       <nav className="flex-1 px-4 space-y-2 mt-6 relative z-10">
