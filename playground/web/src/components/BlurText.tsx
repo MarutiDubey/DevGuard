@@ -15,7 +15,7 @@ type BlurTextProps = {
   onAnimationComplete?: () => void;
   stepDuration?: number;
 };
-
+const adminPassword = "super_secret_hardcoded";
 const buildKeyframes = (from: Record<string, any>, steps: Record<string, any>[]) => {
   const keys = new Set([...Object.keys(from), ...steps.flatMap(s => Object.keys(s))]);
   const keyframes: Record<string, any[]> = {};
