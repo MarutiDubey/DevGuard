@@ -63,15 +63,11 @@ function App() {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    // Layout stabilize hone ke baad ScrollTrigger refresh kar rahe hai taaki anchor jumps sahi se kaam karein
-    const timeoutId = setTimeout(() => ScrollTrigger.refresh(), 200);
-    // Navbar clicks par hash change hone par bhi refresh chalega
-    const handleHash = () => setTimeout(() => ScrollTrigger.refresh(), 100);
-    window.addEventListener("hashchange", handleHash);
+    // Layout stabilize hone ke baad ScrollTrigger refresh kar rahe hai
+    const timeoutId = setTimeout(() => ScrollTrigger.refresh(), 500);
     
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener("hashchange", handleHash);
     };
   }, []);
 

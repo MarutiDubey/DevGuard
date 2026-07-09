@@ -110,6 +110,18 @@ const GooeyNav = ({
       textRef.current.classList.add('active');
     }
     if (filterRef.current) makeParticles(filterRef.current);
+
+    // Ensure smooth scrolling works reliably
+    const href = items[index].href;
+    if (href.startsWith('#')) {
+      const el = document.querySelector(href);
+      if (el) {
+        // Use setTimeout to allow the gooey animation to start before scrolling
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 50);
+      }
+    }
   };
 
   useEffect(() => {
