@@ -101,9 +101,9 @@ export async function POST(request: Request) {
       
       console.log("🟢 [WEBHOOK] Review flow fully completed!");
       return NextResponse.json({ success: true, message: "Review completed" });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error processing PR:", error);
-      return NextResponse.json({ error: "Failed to process review" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to process review", details: error?.message || String(error) }, { status: 500 });
     }
   }
 
